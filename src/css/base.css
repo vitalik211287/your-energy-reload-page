@@ -2,16 +2,17 @@
   --white-color: #fff;
   --primary-color: #2f2f37;
   --border-primary: #808080;
-  --btn-bg-color: #4e75ff;
-  --btn-bg-hover: #6c8cff;
+  --btn-bg-color: #808080;
+  --btn-bg-hover: #fff;
   --timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   --animation-duration: 300ms;
   --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+  --font-family: "DM Sans", sans-serif;
 }
 
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-family);
   line-height: 1.5;
   color: #2f2f37;
   margin: 0 auto;
