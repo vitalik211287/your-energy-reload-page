@@ -10,6 +10,18 @@
   font-style: italic;
 }
 
+.hero-title::before {
+  content: '';
+  display: inline-block;
+  width: 38px;
+  height: 38px;
+  margin-right: 10px;
+  /* background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><use xlink:href="../img/icons.svg#icon-sun"/></svg>'); */
+  background-image: url('../img/hero/hero-star.png');
+  background-size: cover;
+  /* background-position: center 5px; */
+}
+
 .hero-text {
   font-weight: 400;
   font-size: 14px;
