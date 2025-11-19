@@ -1,0 +1,35 @@
+.hero-title {
+  font-weight: 400;
+  font-size: 38px;
+  line-height: 1.16;
+  letter-spacing: -0.02em;
+
+}
+
+.hero-title span {
+  font-style: italic;
+}
+
+.hero-text {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.29;
+  letter-spacing: -0.02em;
+  color: var(--color-header-bg-dark);
+}
+
+.hero-list {
+  display: flex;
+  justify-content: space-between;
+}
+
+.hero-list-item {
+  border: 1px solid var(--color-header-bg-dark);
+  border-radius: 30px;
+  padding: 4px 12px;
+
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.29;
+  color: var(--color-header-bg-dark);
+}
