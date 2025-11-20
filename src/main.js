@@ -1,5 +1,6 @@
 import 'izitoast/dist/css/iziToast.min.css';
 import './js/mobile-menu.js';
+import './js/filters.js';
 
 import { cancelLoader } from './js/loader.js';
 import { registerModalType, initModalButtons } from './js/modal-template.js';
