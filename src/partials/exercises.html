@@ -1,3 +1,48 @@
-<div class="container">
-  <h3>exercises</h3>
-</div>
+<section class="exercises">
+  <div class="container exercises__container">
+    <div class="exercises__header">
+      <h2 class="exercises__title">
+        Exercises /
+        <span class="exercises__subtitle"> Waist</span>
+      </h2>
+
+      <div class="exercises__controls">
+        <form class="exercises__search js-exercises-search">
+          <input
+            type="text"
+            name="query"
+            class="exercises__search-input"
+            placeholder="Search"
+          />
+          <span class="exercises__search-icon" aria-hidden="true"></span>
+        </form>
+
+        <div class="exercises__tabs js-exercises-tabs">
+          <button
+            type="button"
+            class="exercises__tab exercises__tab--active"
+            data-tab="muscles"
+          >
+            Muscles
+          </button>
+          <button type="button" class="exercises__tab" data-tab="body-parts">
+            Body parts
+          </button>
+          <button type="button" class="exercises__tab" data-tab="equipment">
+            Equipment
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ul class="exercises__list js-exercises-list">
+     
+    </ul>
+
+    <div class="exercises__pagination js-exercises-pagination">
+      <button class="exercises__page exercises__page--active">1</button>
+      <button class="exercises__page">2</button>
+      <button class="exercises__page">3</button>
+    </div>
+  </div>
+</section>
