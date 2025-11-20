@@ -13,6 +13,10 @@ import {
   getRatingModalContent,
   initRatingModal,
 } from './js/modal-rating-content.js';
+import { initExercisesTabs } from './js/exercises-tabs.js';
+import { initExercisesList } from './js/exercises-list.js';
+import { renderPagination } from './js/categories.js';
+import { initExercisesSearch } from './js/exercises-search.js';
 
 // функція пошуку
 // ref.searchButton.addEventListener('click', onSearch);
@@ -35,3 +39,7 @@ function initModals() {
   initModalButtons();
 }
 
+initExercisesTabs();
+initExercisesList();
+renderPagination();
+initExercisesSearch();
