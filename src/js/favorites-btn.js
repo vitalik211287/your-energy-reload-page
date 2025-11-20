@@ -26,11 +26,51 @@ function removeFavorite(id) {
   saveFavorites(updated);
 }
 
+const currentExercise = {};
+
+// References (modal button)
+// The button will be found during initFavoritesBtn()
+
 const refs = {
-  favoriteBtnElement: document.querySelector('.favorites-btn'),
+  favoriteBtnElement: null,
 };
 
-const currentExercise = {};
+// Initialize Favorites button
+
+function initFavoritesBtn(exercise) {
+  refs.favoriteBtnElement = document.querySelector('.favorites-btn');
+
+  if (!refs.favoriteBtnElement) return;
+
+  Object.assign(currentExercise, exercise);
+
+  if (isFavorite(exercise.id)) {
+    refs.favoriteBtnElement.textContent = 'Remove from favorites';
+  } else {
+    refs.favoriteBtnElement.textContent = 'Add to favorites';
+  }
+
+  refs.favoriteBtnElement.onclick = () => {
+    if (isFavorite(exercise.id)) {
+      removeFavorite(exercise.id);
+      refs.favoriteBtnElement.textContent = 'Add to favorites';
+    } else {
+      addFavorite(exercise);
+      refs.favoriteBtnElement.textContent = 'Remove from favorites';
+    }
+  };
+}
+
+const testExercise = {
+  id: 'test123',
+  name: 'Push Ups',
+  gifUrl: 'https://example.com/pushups.gif',
+  target: 'chest',
+  bodyPart: 'upper arms',
+  equipment: 'body weight',
+};
+
+initFavoritesBtn(testExercise);
 
 export {
   getFavorites,
@@ -40,4 +80,5 @@ export {
   removeFavorite,
   refs,
   currentExercise,
+  initFavoritesBtn,
 };
