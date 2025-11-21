@@ -39,4 +39,5 @@ function renderFavorites(arr) {
 }
 
 const favorites = getFavorites();
-favorites.length ? renderFavorites(favorites) : renderEmptyMessage();
+if (REFS.favoritesList)
+  favorites.length ? renderFavorites(favorites) : renderEmptyMessage();

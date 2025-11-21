@@ -2,6 +2,7 @@ import { YourEnergyAPI } from './api';
 import { showError } from './iziToast-helper';
 import { renderPaginationUniversal } from './pagination.js';
 import { REFS } from './constants.js';
+import { injectSchemaExercises } from './seo-function.js';
 
 const api = new YourEnergyAPI();
 
@@ -31,7 +32,7 @@ export async function loadExercisesList({ page = 1, keyword = '' } = {}) {
   try {
     const data = await api.getExercises(params);
     const items = data.results || [];
-
+    injectSchemaExercises(data);
     currentPage = data.page || page;
     currentTotalPages = data.totalPages || 1;
 
