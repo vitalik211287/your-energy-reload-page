@@ -10,11 +10,7 @@ let activeFilter = "Muscles";
 let activePage = 1;
 
 // Fetch categories from API and render cards + pagination.
-
 async function getCategories(filter = activeFilter, page = 1, limit = PAGE_LIMIT) {
-  //console.log(`categories: ${filter}, page: ${page}, limit: ${limit}`);
-
-  // update UI state
   activeFilter = filter;
   activePage = page;
 
@@ -22,41 +18,63 @@ async function getCategories(filter = activeFilter, page = 1, limit = PAGE_LIMIT
     const params = { filter, page, limit };
     const data = await fetchApi.getFilters(params);
 
+    // EMPTY DATA CHECK
+    if (!data.results || data.results.length === 0) {
+      showError("Nothing found");
+      clearCards();
+      clearPagination();
+      return;
+    }
+
     renderCards(data.results);
     renderPagination(activePage, data.totalPages);
+
   } catch (err) {
     showError(err.message || 'Something went wrong');
   }
 }
 
 // Cards
-
 function renderCards(items) {
   const container = document.getElementById("cards-container");
   if (!container) return;
+
   container.innerHTML = "";
 
   items.forEach(item => {
     const card = document.createElement("div");
     card.className = "card";
 
+    // Safe values
+    const safeImg = item.imgURL && item.imgURL.trim() !== "" 
+      ? item.imgURL 
+      : "/img/no-image.jpg";     // fallback image
+    
+    const safeName = item.name || "";
+    const safeFilter = item.filter || "";
+
     card.innerHTML = `
-      <img src="${item.imgURL}" alt="${item.name}" />
+      <img src="${safeImg}" alt="${safeName}" />
       <div class="card-body">
-        <h3>${item.name}</h3>
-        <span class="card-filter">${item.filter}</span>
+        <h3>${safeName}</h3>
+        <span>${safeFilter}</span>
       </div>
     `;
 
     container.appendChild(card);
+
+    const cardBody = card.querySelector(".card-body");
+    cardBody.addEventListener("click", () => {
+      onCardBodyClick(safeName);
+    });
   });
 }
 
 // Pagination
-
 function renderPagination(currentPage, totalPages) {
   const container = document.getElementById("pagination");
   if (!container) return;
+
   container.innerHTML = "";
 
   for (let i = 1; i <= totalPages; i++) {
@@ -65,15 +83,14 @@ function renderPagination(currentPage, totalPages) {
 
     btn.textContent = pageNum;
     btn.className = "pagination-page";
-    btn.setAttribute("data-page", pageNum);
+    btn.dataset.page = pageNum;
 
     if (pageNum === currentPage) {
       btn.classList.add("active");
     }
 
-    // CLICK HANDLER
     btn.addEventListener("click", () => {
-      if (pageNum === activePage) return; // already active
+      if (pageNum === activePage) return;
       activePage = pageNum;
       getCategories(activeFilter, pageNum, PAGE_LIMIT);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -83,6 +100,22 @@ function renderPagination(currentPage, totalPages) {
   }
 }
 
+// Clear Helpers
+function clearCards() {
+  const container = document.getElementById("cards-container");
+  if (container) container.innerHTML = "";
+}
+
+function clearPagination() {
+  const container = document.getElementById("pagination");
+  if (container) container.innerHTML = "";
+}
+
+// Callback on card click
+export function onCardBodyClick(nameValue) {
+  console.log("Clicked name:", nameValue);
+  // here need to add logic how to join categories and exercises
+}
+
 // First load
 getCategories(activeFilter, activePage, PAGE_LIMIT);
-
