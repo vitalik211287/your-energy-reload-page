@@ -29,8 +29,8 @@
     />
     <meta property="og:type" content="website" />
     <script type="module" crossorigin src="/your-energy/assets/vendor-3BNOZKAJ.js"></script>
-    <script type="module" crossorigin src="/your-energy/assets/main-CRjTWk3m.js"></script>
-    <link rel="stylesheet" crossorigin href="/your-energy/assets/main-Dcg8PurZ.css">
+    <script type="module" crossorigin src="/your-energy/assets/main-8550evQp.js"></script>
+    <link rel="stylesheet" crossorigin href="/your-energy/assets/main-B6kYrAZr.css">
     <link rel="stylesheet" crossorigin href="/your-energy/assets/vendor-D_nxXpU-.css">
   </head>
   <body id="bg-loader" class="fixedClass">
@@ -176,21 +176,22 @@
         <h2 class="footer__title">
           Transforming your <span>body</span> shape with us
         </h2>
+
+      </div>
+      <form class="footer__form">
         <p class="footer__subtitle">
           Subscribe and learn about new exercises!
         </p>
-      </div>
-
-      <form class="footer__form">
         <label class="footer__label">
           <input type="email" class="footer__input" placeholder="Email" required />
         </label>
         <button type="submit" class="footer__btn">Send</button>
+        <p class="footer__message" aria-live="polite"></p>
       </form>
     </div>
   </div>
 
-  <div class="container footer__bottom">
+  <div class="footer__bottom">
     <p class="footer__copy">Your Energy. All rights reserved.</p>
 
     <p class="footer__policy">
@@ -205,8 +206,27 @@
 
     <div class="container">
   <h3>modal exercises</h3>
-</div>
 
+  <button class="favorites-btn" data-id="">Add to favorites</button>
+</div>
+<template id="exercise-modal-template">
+  <div class="exercise-modal">
+
+    <h2 class="exercise-modal__title"></h2>
+
+    <img class="exercise-modal__gif" src="" alt="Exercise GIF" />
+
+    <div class="exercise-modal__info">
+      <p><b>Target:</b> <span class="exercise-modal__target"></span></p>
+      <p><b>Body part:</b> <span class="exercise-modal__bodypart"></span></p>
+      <p><b>Equipment:</b> <span class="exercise-modal__equipment"></span></p>
+    </div>
+
+    <p class="exercise-modal__instructions"></p>
+
+    <button class="favorites-btn">Add to favorites</button>
+  </div>
+</template>
     <div class="rating-modal">
   <form class="rating-modal__form" id="rating-form">
     <div class="rating-modal__rating">
@@ -425,6 +445,5 @@
 </div>
 
 
-    <!-- <script type="module" src="./js/favorites.js"></script> -->
   </body>
 </html>
