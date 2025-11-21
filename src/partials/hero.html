@@ -9,12 +9,13 @@
         </p>
       </div>
       <div class="hero-img-and-list">
-        <picture>
+        <picture class="hero-mini-picture">
           <source media="(min-width: 1200px)" srcset="
                         ./img/hero/hero-mini.webp    1x,
                         ./img/hero/hero-mini@2x.webp 2x
                       " />
-          <img class="hero-mini-img" src="./img/hero/hero-mini.jpg" alt="two women doing fitness" width="168" />
+          <img class="hero-mini-img" src="./img/hero/hero-mini.jpg" alt="two women doing fitness" width="168"
+            fetchpriority="high" decoding="async" height="" />
         </picture>
         <ul class="hero-list-desktop">
           <li class="hero-list-item">#Sport</li>

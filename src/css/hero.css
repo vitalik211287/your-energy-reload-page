@@ -143,5 +143,8 @@
     display: none;
   }
 
+  .hero-mini-img {
+    border-radius: 20px;
+  }
 
 }
