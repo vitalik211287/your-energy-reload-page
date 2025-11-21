@@ -14,17 +14,18 @@ if (tabsContainer && searchBox && subtitle) {
       if (desktop) {
         // DESKTOP: показываем через opacity
         searchBox.classList.add('filters__search--visible');
-        searchBox.classList.remove('filters__search--visible-mobile');
+        // searchBox.classList.remove('filters__search--visible-mobile');
       } else {
         // MOBILE + TABLET: поиск появляется вместо табов, сдвигая их вправо/вниз
-        searchBox.classList.add('filters__search--visible-mobile');
-        searchBox.classList.remove('filters__search--visible');
+        // searchBox.classList.add('filters__search--visible-mobile');
+        searchBox.classList.add('filters__search--visible');
+        // searchBox.classList.remove('filters__search--visible');
       }
     } else {
       subtitle.textContent = '';
       searchBox.classList.remove(
-        'filters__search--visible',
-        'filters__search--visible-mobile'
+        'filters__search--visible'
+        // 'filters__search--visible-mobile'
       );
     }
   };
