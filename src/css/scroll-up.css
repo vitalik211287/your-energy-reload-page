@@ -17,6 +17,10 @@
   width: 40px;
   height: 40px;
   text-decoration: none;
+  background-image: url('../img/arrow-top-right.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 13px 13px;
 }
 
 .scroll-up-btn:hover,
@@ -29,32 +33,10 @@
   pointer-events: auto;
 }
 
-.scroll-up-btn svg {
-  width: 50%;
-  height: 50%;
-  fill: #f4f4f4; /* колір стрілки */
-}
-
-.icon-desktop,
-.icon-mobile {
-  width: 50%;
-  height: 50%;
-  fill: var(--color-white, #f4f4f4);
-}
-
-.icon-mobile {
-  display: none;
-}
-
 @media screen and (min-width: 768px) {
   .scroll-up-btn {
     width: 60px;
     height: 60px;
-  }
-  .icon-desktop {
-    display: block;
-  }
-  .icon-mobile {
-    display: none;
+    background-size: 23px 23px;
   }
 }
