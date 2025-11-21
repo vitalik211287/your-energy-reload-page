@@ -1,6 +1,7 @@
 import { YourEnergyAPI } from './api';
 import { showError } from './iziToast-helper'; // якщо не хочеш тости — можеш замінити на console.error
 import { renderPaginationUniversal } from './pagination.js';
+import { injectSchemaExercises } from './seo-function.js';
 
 const api = new YourEnergyAPI();
 
@@ -12,18 +13,13 @@ function getPageLimit() {
 let currentPage = 1;
 let currentTotalPages = 1;
 
-
 export async function initExercisesList() {
   const listEl = document.querySelector('.js-exercises-list');
   if (!listEl) return;
 
-  
   // перше завантаження
   await loadExercisesList({ page: 1 });
-
-
 }
-
 
 export async function loadExercisesList({ page = 1, keyword = '' } = {}) {
   const listEl = document.querySelector('.js-exercises-list');
@@ -40,9 +36,12 @@ export async function loadExercisesList({ page = 1, keyword = '' } = {}) {
 
   try {
     const data = await api.getExercises(params);
+
     const items = data.results || [];
     currentPage = data.page || page;
     currentTotalPages = data.totalPages || 1;
+    console.log('data', data);
+    injectSchemaExercises(data);
 
     renderExercisesList(listEl, items);
     renderExercisesPagination(currentPage, currentTotalPages);
@@ -58,7 +57,6 @@ export async function loadExercisesList({ page = 1, keyword = '' } = {}) {
     `;
   }
 }
-
 
 function getTypeAndFilterFromUI() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -98,7 +96,6 @@ function getDefaultFilterForType(type) {
       return 'waist';
   }
 }
-
 
 function buildExercisesParams({ page, limit, type, filter, keyword }) {
   const params = { page, limit };
@@ -140,7 +137,6 @@ function renderExercisesList(listEl, items) {
   const markup = items.map(createExerciseCardMarkup).join('');
   listEl.innerHTML = markup;
 }
-
 
 function createExerciseCardMarkup(item) {
   const { name, burnedCalories, bodyPart, target, rating } = item;
