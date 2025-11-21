@@ -1,5 +1,5 @@
 import { YourEnergyAPI } from './api';
-import { showError } from './iziToast-helper'; // якщо не хочеш тости — можеш замінити на console.error
+import { showError } from './iziToast-helper'; 
 import { renderPaginationUniversal } from './pagination.js';
 
 const api = new YourEnergyAPI();
