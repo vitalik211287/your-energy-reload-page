@@ -48,6 +48,7 @@
   width: 100%;
   border-radius: 30px;
   margin-bottom: 20px;
+  background: #fff;
 }
 
 .hero-list {
@@ -145,6 +146,7 @@
 
   .hero-mini-img {
     border-radius: 20px;
+    background: #fff;
   }
 
 }
