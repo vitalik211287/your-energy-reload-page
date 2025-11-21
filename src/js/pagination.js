@@ -1,13 +1,14 @@
 export function renderPaginationUniversal({
-  container, // HTMLElement (вже знайдений)
-  currentPage, // поточна сторінка (number)
-  totalPages, // всього сторінок (number)
-  onPageChange, // callback(page)
-  mode = 'full', // 'full' | 'neighbors'
+  container,
+  currentPage,
+  totalPages,
+  onPageChange,
+  mode = 'full',
   showArrows = false,
   classes = {},
   icons = {},
   scrollToTop = true,
+  scrollTarget = null, // <-- новий параметр
 }) {
   if (!container) return;
   container.innerHTML = '';
@@ -20,7 +21,6 @@ export function renderPaginationUniversal({
 
   const { prev: prevIcon = 'Prev', next: nextIcon = 'Next' } = icons;
 
-  // Хелпер: створення кнопки
   const createBtn = (label, page, className = '') => {
     const btn = document.createElement('button');
     btn.className = className;
@@ -30,20 +30,12 @@ export function renderPaginationUniversal({
   };
 
   if (mode === 'full') {
-    // 1 2 3 4 ... totalPages
     for (let i = 1; i <= totalPages; i++) {
-      const pageNum = i;
-      const btn = createBtn(pageNum, pageNum, pageClass);
-
-      if (pageNum === currentPage) {
-        btn.classList.add(activeClass);
-      }
-
+      const btn = createBtn(i, i, pageClass);
+      if (i === currentPage) btn.classList.add(activeClass);
       container.appendChild(btn);
     }
   } else if (mode === 'neighbors') {
-    // (currentPage - 1), currentPage, (currentPage + 1)
-
     let pages = [];
 
     if (totalPages <= 3) {
@@ -56,22 +48,16 @@ export function renderPaginationUniversal({
       pages = [currentPage - 1, currentPage, currentPage + 1];
     }
 
-    pages.forEach(pageNum => {
+    pages.forEach(p => {
       const btn = createBtn(
-        pageNum,
-        pageNum,
-        `${pageClass} ${pageNum === currentPage ? activeClass : ''}`.trim()
+        p,
+        p,
+        `${pageClass} ${p === currentPage ? activeClass : ''}`.trim()
       );
       container.appendChild(btn);
     });
   }
 
-  // ▶
-  if (showArrows) {
-    container.appendChild(createArrow('next'));
-  }
-
-  // CLICK HANDLER
   container.querySelectorAll('button').forEach(btn => {
     btn.addEventListener('click', () => {
       const page = Number(btn.dataset.page);
@@ -80,7 +66,18 @@ export function renderPaginationUniversal({
       onPageChange(page);
 
       if (scrollToTop) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (scrollTarget) {
+          const el =
+            typeof scrollTarget === 'string'
+              ? document.querySelector(scrollTarget)
+              : scrollTarget;
+
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       }
     });
   });

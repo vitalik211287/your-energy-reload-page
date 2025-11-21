@@ -2,6 +2,10 @@
   padding: 32px 0;
 }
 
+.hidden {
+  display: none;
+}
+
 /* HEADER */
 
 .exercises__header {
@@ -213,18 +217,29 @@
   line-height: 1.29;
 }
 
+.exercises__start-btn:hover {
+  background-color: #f5f5f5;
+  border-color: #24242480;
+}
+
+/* Focus — чітка видима «аура» */
+.exercises__start-btn:focus {
+  outline: none;
+  border: 1px solid #242424;
+}
+
+.exercises__start-btn:active {
+  outline: none;
+  border: 1px solid #242424;
+  transform: scale(0.97);
+}
+
 .exercises__item-bottom {
   width: 100%;
   display: flex;
   justify-content: space-between;
   gap: 10px;
   font-size: 12px;
-}
-
-.exercises__meta {
-  /* max-width: 135px; */
-  /* display: flex;
-  gap: 4px; */
 }
 
 .exercises__meta-label {
@@ -245,10 +260,6 @@
   letter-spacing: 0px;
   color: #242424;
 }
-
-/* .exercises__pagination  {
-  margin-right: 2px;
-} */
 
 .star {
   width: 16px;
@@ -324,14 +335,22 @@
     font-size: 16px;
   }
 
-  .exercises__list {
+  /* .exercises__list {
     display: flex;
     flex-wrap: wrap;
+    gap: 20px;
+  } */
+
+  .exercises__list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 0 auto;
     gap: 20px;
   }
 
   .exercises__item {
-    width: 344px; /* як у тебе */
+    width: 344px;
   }
 
   .exercises__header {
@@ -343,7 +362,6 @@
     margin-right: 0;
   }
 
-  /* 🔥 ОНОВЛЕНИЙ controls */
   .exercises__controls {
     display: flex;
     flex-direction: row;
@@ -352,7 +370,7 @@
     justify-content: space-between;
     gap: 24px;
     max-width: 722px;
-    width: 100%;              /* важливо: не 100% */ 
+    width: 100%;
   }
 
   .exercises__search {
@@ -372,15 +390,26 @@
 /* DESKTOP */
 
 @media screen and (min-width: 1440px) {
-  /* .exercises__item {
-    flex: 1 1 calc(33.333% - 20px);
-  } */
+  .exercises__container {
+    max-width: 900px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .exercises__list {
+    gap: 16px;
+  }
 
   .exercises {
-    padding: 56px 0;
+    /* padding: 56px 0; */
+    max-width: 900px;
+    margin-left: auto;
   }
 
   .exercises__title {
     font-size: 32px;
+  }
+  .exercises__item {
+    width: 442px;
   }
 }

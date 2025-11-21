@@ -4,6 +4,11 @@ import { renderPaginationUniversal } from './pagination.js';
 
 const api = new YourEnergyAPI();
 
+console.log(api);
+
+const exercisesSection = document.querySelector('.exercises');
+console.log(exercisesSection);
+
 // 8 карток на мобілі, 10 — на таблетці/десктопі
 function getPageLimit() {
   return window.innerWidth < 768 ? 8 : 10;
@@ -21,6 +26,7 @@ export async function initExercisesList() {
   const listEl = document.querySelector('.js-exercises-list');
   if (!listEl) return;
 
+  
   // перше завантаження
   await loadExercisesList({ page: 1 });
 
@@ -43,7 +49,7 @@ export async function loadExercisesList({ page = 1, keyword = '' } = {}) {
 
   const limit = getPageLimit();
 
-  const {  type, filter } = getTypeAndFilterFromUI();
+  const { type, filter } = getTypeAndFilterFromUI();
   const params = buildExercisesParams({ page, limit, type, filter, keyword });
 
   console.log('ACTIVE TYPE:', type);
@@ -223,16 +229,19 @@ export function renderExercisesPagination(currentPage, totalPages) {
       page: 'exercises__page',
       active: 'active',
     },
+    scrollToTop: true,
+    scrollTarget: '.exercises', // або '#exercises', дивись як у тебе в HTML
     onPageChange(page) {
-      loadExercisesList({ page });
+      return loadExercisesList({ page });
     },
   });
 }
 
 // import { renderPaginationUniversal } from './pagination.js';
 
-// export function renderCategoriesPagination(currentPage, totalPages) {
+// function renderPagination(currentPage, totalPages) {
 //   const container = document.getElementById('pagination');
+//   if (!container) return;
 
 //   renderPaginationUniversal({
 //     container,
@@ -243,13 +252,16 @@ export function renderExercisesPagination(currentPage, totalPages) {
 //       page: 'pagination-page',
 //       active: 'active',
 //     },
+//     scrollToTop: true,
+//     scrollTarget: '#exercise-categories',
+//     // або '.filters' / '.categories' — постав свій реальний селектор секції
+
 //     onPageChange(page) {
 //       if (page === activePage) return;
 //       activePage = page;
-//       getCategories(activeFilter, page, PAGE_LIMIT);
+
+//       // важливо: повертаємо проміс, щоб скрол був ПІСЛЯ рендера
+//       return getCategories(activeFilter, page, PAGE_LIMIT);
 //     },
 //   });
 // }
-
-// // First load
-// getCategories(activeFilter, activePage, PAGE_LIMIT);

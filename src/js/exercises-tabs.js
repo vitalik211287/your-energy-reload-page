@@ -46,17 +46,10 @@ export function initExercisesTabs() {
   const tabs = tabsContainer.querySelectorAll('.exercises__tab');
   const searchInput = document.querySelector('.exercises__search-input');
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      // 1. перемикаємо активний таб
-      tabs.forEach(t => t.classList.remove('exercises__tab--active'));
-      tab.classList.add('exercises__tab--active');
+  tab.addEventListener('click', () => {
+    document.getElementById('categories-section')?.classList.add('hidden');
+    document.getElementById('exercises-section')?.classList.remove('hidden');
 
-      // 2. якщо був введений пошук — передаємо keyword
-      const keyword = searchInput ? searchInput.value.trim() : '';
-
-      // 3. завантажуємо список строго з { page: 1 }
-      loadExercisesList({ page: 1, keyword });
-    });
+    loadExercisesList({ page: 1 });
   });
 }
