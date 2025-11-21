@@ -1,0 +1,60 @@
+.scroll-up-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-black, #242424);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0px 16px rgba(255, 255, 255, 0.7);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s, background-color 0.3s;
+  z-index: 25;
+  width: 40px;
+  height: 40px;
+  text-decoration: none;
+}
+
+.scroll-up-btn:hover,
+.scroll-up-btn:focus {
+  transform: scale(1.05);
+}
+
+.scroll-up-btn.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.scroll-up-btn svg {
+  width: 50%;
+  height: 50%;
+  fill: #f4f4f4; /* колір стрілки */
+}
+
+.icon-desktop,
+.icon-mobile {
+  width: 50%;
+  height: 50%;
+  fill: var(--color-white, #f4f4f4);
+}
+
+.icon-mobile {
+  display: none;
+}
+
+@media screen and (min-width: 768px) {
+  .scroll-up-btn {
+    width: 60px;
+    height: 60px;
+  }
+  .icon-desktop {
+    display: block;
+  }
+  .icon-mobile {
+    display: none;
+  }
+}
