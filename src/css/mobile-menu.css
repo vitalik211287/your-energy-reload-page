@@ -59,11 +59,10 @@
   flex-direction: column;
   gap: 24px;
   align-items: center;
-
+  margin-bottom: 40px;
   margin-top: 40vh;
   transform: translateY(-50%);
 }
-
 
 .mobile-menu__link {
   font-family: inherit;
@@ -80,9 +79,6 @@
   display: flex;
   justify-content: center;
   gap: 12px;
-
-  margin-top: auto;
-  margin-bottom: 40px;
 }
 
 .mobile-menu__socials .socials__link {
