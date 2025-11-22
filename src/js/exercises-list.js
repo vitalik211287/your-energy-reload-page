@@ -2,7 +2,12 @@ import { YourEnergyAPI } from './api';
 import { showError } from './iziToast-helper'; // якщо не хочеш тости — можеш замінити на console.error
 import { renderPaginationUniversal } from './pagination.js';
 import iziToast from 'izitoast';
+import { openModal, closeModal } from './modal-template.js';
 import { startLoader, cancelLoader } from './loader.js'; // <-- додали лоадер
+import {
+  getExerciseModalContent,
+  initExerciseModal,
+} from './modal-exercise-content.js';
 
 const api = new YourEnergyAPI();
 console.dir(api);
@@ -60,10 +65,6 @@ export async function loadExercisesList({
     keyword: activeKeyword,
   });
 
-  console.log('ACTIVE TYPE:', activeType);
-  console.log('FILTER VALUE:', activeFilter);
-  console.log('EXERCISES PARAMS:', params);
-
   // 2) анти-гонка
   const requestId = ++lastRequestId;
 
@@ -71,7 +72,6 @@ export async function loadExercisesList({
 
   try {
     const data = await api.getExercises(params);
-    console.log(data);
 
     // якщо це старий запит — нічого не робимо
     if (requestId !== lastRequestId) return;
@@ -183,6 +183,7 @@ export function renderExercisesList(listEl, items, isFavorite = false) {
     .map(it => createExerciseCardMarkup(it, isFavorite))
     .join('');
   listEl.innerHTML = markup;
+  handleExerciseItemClick(listEl);
 }
 
 // function createExerciseCardMarkup(item) {
@@ -317,4 +318,44 @@ export function renderExercisesPagination(currentPage, totalPages) {
       return loadExercisesList({ page });
     },
   });
+}
+
+function handleExerciseItemClick(listEl) {
+  const startButtons = listEl.querySelectorAll(
+    '.exercises__start-btn[data-exercise-id]'
+  );
+
+  startButtons.forEach(button => {
+    if (button.hasAttribute('data-click-handler-attached')) {
+      return;
+    }
+
+    button.addEventListener('click', handleExcersiseModalOpen);
+    button.setAttribute('data-click-handler-attached', 'true');
+  });
+}
+
+async function handleExcersiseModalOpen(event) {
+  const button = event.currentTarget;
+  const exerciseId = button.getAttribute('data-exercise-id');
+
+  if (!exerciseId) {
+    console.error('Exercise ID is missing');
+    return;
+  }
+
+  sessionStorage.setItem('exerciseModalExerciseId', exerciseId);
+
+  const content = getExerciseModalContent();
+  if (!content) {
+    console.error('Failed to get exercise modal content');
+    return;
+  }
+
+  openModal(content);
+  try {
+    await initExerciseModal(closeModal);
+  } catch (error) {
+    console.error('Error initializing exercise modal:', error);
+  }
 }
