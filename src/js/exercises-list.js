@@ -169,10 +169,7 @@ function buildExercisesParams({ page, limit, type, filter, keyword }) {
   return params;
 }
 
-/**
- * Рендер UL зі списком вправ
- */
-function renderExercisesList(listEl, items) {
+export function renderExercisesList(listEl, items, isFavorite = false) {
   if (!items.length) {
     listEl.innerHTML = `
       <li class="exercises__item">
@@ -182,35 +179,105 @@ function renderExercisesList(listEl, items) {
     return;
   }
 
-  const markup = items.map(createExerciseCardMarkup).join('');
+  const markup = items
+    .map(it => createExerciseCardMarkup(it, isFavorite))
+    .join('');
   listEl.innerHTML = markup;
 }
 
-function createExerciseCardMarkup(item) {
-  const { name, burnedCalories, bodyPart, target, rating, time } = item;
+// function createExerciseCardMarkup(item) {
+//   const { name, burnedCalories, bodyPart, target, rating } = item;
+
+//   return `
+//     <li class="exercises__item" data-exercise-id="${item._id}">
+//       <div class="exercises__item-top">
+//         <div class="exercises__item-info">
+//           <span class="exercises__badge">Workout</span>
+//           <div class="exercises__rating">
+//             <span class="exercises__meta-key">${rating}</span>
+//             <span class="exercises__meta-value">
+//               <svg class="star"></svg>
+//             </span>
+//           </div>
+//         </div>
+
+//         <button
+//           type="button"
+//           class="exercises__start-btn js-open-exercise"
+//           data-exercise-id="${item._id}"
+//         >
+//           Start
+//           <svg class="arrow__icon"></svg>
+//         </button>
+//       </div>
+
+//       <div class="exercises__name-container">
+//         <svg class="exercises__icon"></svg>
+//         <h3 class="exercises__name">${name}</h3>
+//       </div>
+
+//       <div class="exercises__item-bottom">
+//         <p class="exercises__meta">
+//           <span class="exercises__meta-label">Burned calories:</span>
+//           <span class="exercises__meta-value">${burnedCalories}</span>
+//         </p>
+//         <p class="exercises__meta">
+//           <span class="exercises__meta-label">Body part:</span>
+//           <span class="exercises__meta-value">${bodyPart}</span>
+//         </p>
+//         <p class="exercises__meta">
+//           <span class="exercises__meta-label">Target:</span>
+//           <span class="exercises__meta-value">${target}</span>
+//         </p>
+//       </div>
+//     </li>
+//   `;
+// }
+function createExerciseCardMarkup(item, isFavorite = false) {
+  const { name, burnedCalories, bodyPart, target, time, rating, _id } = item;
+  const actionMarkup = isFavorite
+    ? `<button type="button" class="favorites-delete-btn" data-id="${_id}">
+         <svg class="favorites-icon-trash" width="16" height="16" aria-label="Remove from favorites">
+            <use href="/img/trash.svg"></use> 
+         </svg>
+       </button>`
+    : `<div class="exercises__rating">
+         <span class="exercises__meta-key">${rating}</span>
+         <span class="exercises__meta-value">
+           <svg class="star" width="18" height="18">
+             <use href="./src/img/sprite.svg#icon-star"></use>
+           </svg>
+         </span>
+       </div>`;
 
   return `
-      <li class="exercises__item">
-        <div class="exercises__item-top">
-          <div class="exercises__item-info">
-            <span class="exercises__badge">Workout</span>
-            <div class="exercises__rating">
-              <span class="exercises__meta-key">${rating}</span>
-              <span class="exercises__meta-value">
-                <svg class="star"></svg>
-              </span>
-            </div>
-          </div>
-          <button type="button" class="exercises__start-btn js-exercises-start">
-            Start
-            <svg class="arrow__icon"></svg>
-          </button>
+    <li class="exercises__item" data-exercise-id="${_id}">
+      <div class="exercises__item-top">
+        <div class="exercises__item-info">
+          <span class="exercises__badge">Workout</span>
+          
+          ${actionMarkup} 
+          
         </div>
 
-        <div class="exercises__name-container">
-          <svg class="exercises__icon"></svg>
-          <h3 class="exercises__name">${name}</h3>
-        </div>
+        <button
+          type="button"
+          class="exercises__start-btn js-open-exercise"
+          data-exercise-id="${_id}"
+        >
+          Start
+          <svg class="arrow__icon" width="16" height="16">
+             <use href="./src/img/sprite.svg#icon-arrow"></use>
+          </svg>
+        </button>
+      </div>
+
+      <div class="exercises__name-container">
+        <svg class="exercises__icon" width="24" height="24">
+           <use href="./src/img/sprite.svg#icon-running-man"></use>
+        </svg>
+        <h3 class="exercises__name">${name}</h3>
+      </div>
 
         <div class="exercises__item-bottom">
           <p class="exercises__meta">
