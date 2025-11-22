@@ -42,5 +42,3 @@ export function handleCategoryCardClick(item) {
     window.history.pushState({}, '', url);
   };
 }
-
-

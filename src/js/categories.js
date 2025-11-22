@@ -18,6 +18,20 @@ async function getCategories(filter = activeFilter, page = 1, limit = PAGE_LIMIT
     const params = { filter, page, limit };
     const data = await fetchApi.getFilters(params);
 
+    if (!data) {
+      showError("Failed to fetch categories: No response from server");
+      clearCards();
+      clearPagination();
+      return;
+    }
+
+    if (data.error || data.status === 'error') {
+      showError(data.message || "Failed to fetch categories");
+      clearCards();
+      clearPagination();
+      return;
+    }
+
     if (!data.results || data.results.length === 0) {
       showError("Nothing found");
       clearCards();
@@ -34,6 +48,8 @@ async function getCategories(filter = activeFilter, page = 1, limit = PAGE_LIMIT
   } catch (err) {
     console.error('getCategories error:', err);
     showError(err?.message || 'Something went wrong');
+    clearCards();
+    clearPagination();
   }
 }
 
@@ -56,7 +72,7 @@ function renderCards(items) {
     const safeFilter = item.filter || "";
 
     card.innerHTML = `
-      <img src="${safeImg}" alt="${safeName}" />
+      <img src="${safeImg}" alt="${safeName}" loading="lazy" />
       <div class="card-body">
         <h3>${safeName}</h3>
         <span>${safeFilter}</span>
