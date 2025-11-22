@@ -1,14 +1,13 @@
 import { YourEnergyAPI } from './api';
 import { showError } from './iziToast-helper';
 import { renderPaginationUniversal } from './pagination.js';
-import { REFS } from './constants.js';
-import { injectSchemaExercises } from './seo-function.js';
+import iziToast from 'izitoast';
 import { openModal, closeModal } from './modal-template.js';
+import { startLoader, cancelLoader } from './loader.js';
 import {
   getExerciseModalContent,
   initExerciseModal,
 } from './modal-exercise-content.js';
-import { MODAL_TYPES } from './constants.js';
 
 const api = new YourEnergyAPI();
 
@@ -16,72 +15,116 @@ function getPageLimit() {
   return window.innerWidth < 768 ? 8 : 10;
 }
 
+let currentQuery = {
+  type: 'body-parts',
+  filter: 'waist',
+  keyword: '',
+};
+
 let currentPage = 1;
 let currentTotalPages = 1;
+let lastRequestId = 0;
+let lastEmptyToastKey = '';
 
-export async function initExercisesList() {
-  const listEl = REFS.exercisesList;
-  if (!listEl) return;
-
-  await loadExercisesList({ page: 1 });
-}
-
-export async function loadExercisesList({ page = 1, keyword = '' } = {}) {
-  const listEl = REFS.exercisesList;
+export async function loadExercisesList({
+  page = 1,
+  type,
+  filter,
+  keyword,
+} = {}) {
+  const listEl = document.querySelector('.js-exercises-list');
   if (!listEl) return;
 
   const limit = getPageLimit();
 
-  const { type, filter } = getTypeAndFilterFromUI();
-  const params = buildExercisesParams({ page, limit, type, filter, keyword });
+  if (type !== undefined) currentQuery.type = type;
+  if (filter !== undefined) currentQuery.filter = filter;
+  if (keyword !== undefined) currentQuery.keyword = keyword;
+
+  const activeType = currentQuery.type;
+  const activeFilter = currentQuery.filter;
+  const activeKeyword = currentQuery.keyword || '';
+
+  const params = buildExercisesParams({
+    page,
+    limit,
+    type: activeType,
+    filter: activeFilter,
+    keyword: activeKeyword,
+  });
+
+  const requestId = ++lastRequestId;
+
+  startLoader();
 
   try {
     const data = await api.getExercises(params);
+    if (requestId !== lastRequestId) return;
+
     const items = data.results || [];
-    injectSchemaExercises(data);
     currentPage = data.page || page;
     currentTotalPages = data.totalPages || 1;
 
     renderExercisesList(listEl, items);
     renderExercisesPagination(currentPage, currentTotalPages);
+
+    if (!items.length) {
+      const emptyKey = `${activeType}:${activeFilter}:${activeKeyword || ''}`;
+
+      if (emptyKey !== lastEmptyToastKey) {
+        lastEmptyToastKey = emptyKey;
+
+        if (activeKeyword || type !== undefined || filter !== undefined) {
+          iziToast.warning({
+            title: 'No results',
+            message: activeKeyword
+              ? `Nothing found for “${activeKeyword}”. Try another search.`
+              : 'No exercises found for this category.',
+            position: 'topRight',
+          });
+        }
+      }
+    } else {
+      lastEmptyToastKey = '';
+    }
+
+    const shouldUpdateUrl =
+      type !== undefined || filter !== undefined || keyword !== undefined;
+
+    if (shouldUpdateUrl) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('type', activeType);
+      url.searchParams.set('filter', activeFilter);
+
+      if (activeKeyword) url.searchParams.set('keyword', activeKeyword);
+      else url.searchParams.delete('keyword');
+
+      window.history.pushState({}, '', url);
+    }
   } catch (err) {
     console.error('Failed to load exercises:', err);
-    showError(err.message || 'Failed to load exercises. Try again later.');
+
+    if (requestId !== lastRequestId) return;
+
+    if (typeof showError === 'function') {
+      showError(err.message || 'Failed to load exercises. Try again later.');
+    } else {
+      iziToast.error({
+        title: 'Error',
+        message: err.message || 'Failed to load exercises. Try again later.',
+        position: 'topRight',
+      });
+    }
 
     listEl.innerHTML = `
       <li class="exercises__item">
         <p>Failed to load exercises. Try again later.</p>
       </li>
     `;
-  }
-}
-
-function getTypeAndFilterFromUI() {
-  const urlParams = new URLSearchParams(window.location.search);
-
-  const typeFromUrl = urlParams.get('type') || urlParams.get('tab');
-
-  const activeTab =
-    REFS.exercisesActiveTab?.dataset.tab || typeFromUrl || 'body-parts';
-
-  const filterFromUrl = urlParams.get('filter');
-  const fallbackFilter = getDefaultFilterForType(activeTab);
-
-  return {
-    type: activeTab,
-    filter: filterFromUrl || fallbackFilter,
-  };
-}
-
-function getDefaultFilterForType(type) {
-  switch (type) {
-    case 'muscles':
-      return 'abs';
-    case 'equipment':
-      return 'body weight';
-    case 'body-parts':
-    default:
-      return 'waist';
+  } finally {
+    if (requestId === lastRequestId) {
+      cancelLoader();
+    }
   }
 }
 
@@ -107,7 +150,7 @@ function buildExercisesParams({ page, limit, type, filter, keyword }) {
   return params;
 }
 
-function renderExercisesList(listEl, items) {
+export function renderExercisesList(listEl, items, isFavorite = false) {
   if (!items.length) {
     listEl.innerHTML = `
       <li class="exercises__item">
@@ -117,59 +160,96 @@ function renderExercisesList(listEl, items) {
     return;
   }
 
-  const markup = items.map(createExerciseCardMarkup).join('');
+  const markup = items
+    .map(it => createExerciseCardMarkup(it, isFavorite))
+    .join('');
   listEl.innerHTML = markup;
-
   handleExerciseItemClick(listEl);
 }
 
-function createExerciseCardMarkup(item) {
-  const { name, burnedCalories, bodyPart, target, rating } = item;
+function createExerciseCardMarkup(item, isFavorite = false) {
+  const { name, burnedCalories, bodyPart, target, time, rating, _id } = item;
+  const actionMarkup = isFavorite
+    ? `<button type="button" class="favorites-delete-btn" data-id="${_id}">
+         <svg class="favorites-icon-trash" width="16" height="16" aria-label="Remove from favorites">
+            <use href="./src/img/trash.svg"></use> 
+         </svg>
+       </button>`
+    : `<div class="exercises__rating">
+         <span class="exercises__meta-key">${rating}</span>
+         <span class="exercises__meta-value">
+           <svg class="star" width="18" height="18">
+             <use href="./src/img/star"></use>
+           </svg>
+         </span>
+       </div>`;
 
   return `
-    <li class="exercises__item" data-exercise-id="${item._id}">
+    <li class="exercises__item" data-exercise-id="${_id}">
       <div class="exercises__item-top">
         <div class="exercises__item-info">
           <span class="exercises__badge">Workout</span>
-          <div class="exercises__rating">
-            <span class="exercises__meta-key">${rating}</span>
-            <span class="exercises__meta-value">
-              <svg class="star"></svg>
-            </span>
-          </div>
+          
+          ${actionMarkup} 
+          
         </div>
 
         <button
           type="button"
           class="exercises__start-btn js-open-exercise"
-          data-exercise-id="${item._id}"
+          data-exercise-id="${_id}"
         >
           Start
-          <svg class="arrow__icon"></svg>
+          <svg class="arrow__icon" width="16" height="16">
+             <use href="./src/img/arrow-right.svg"></use>
+          </svg>
         </button>
       </div>
 
       <div class="exercises__name-container">
-        <svg class="exercises__icon"></svg>
+        <svg class="exercises__icon" width="24" height="24">
+           <use href="./src/img/runing-man.svg"></use>
+        </svg>
         <h3 class="exercises__name">${name}</h3>
       </div>
 
-      <div class="exercises__item-bottom">
-        <p class="exercises__meta">
-          <span class="exercises__meta-label">Burned calories:</span>
-          <span class="exercises__meta-value">${burnedCalories}</span>
-        </p>
-        <p class="exercises__meta">
-          <span class="exercises__meta-label">Body part:</span>
-          <span class="exercises__meta-value">${bodyPart}</span>
-        </p>
-        <p class="exercises__meta">
-          <span class="exercises__meta-label">Target:</span>
-          <span class="exercises__meta-value">${target}</span>
-        </p>
-      </div>
-    </li>
+        <div class="exercises__item-bottom">
+          <p class="exercises__meta">
+            <span class="exercises__meta-label">Burned calories:</span>
+            <span class="exercises__meta-value">${burnedCalories} / ${time}</span>
+          </p>
+          <p class="exercises__meta">
+            <span class="exercises__meta-label">Body part:</span>
+            <span class="exercises__meta-value">${bodyPart}</span>
+          </p>
+          <p class="exercises__meta">
+            <span class="exercises__meta-label">Target:</span>
+            <span class="exercises__meta-value">${target}</span>
+          </p>
+        </div>
+      </li>
   `;
+}
+
+export function renderExercisesPagination(currentPage, totalPages) {
+  const container = document.querySelector('.js-exercises-pagination');
+  if (!container) return;
+
+  renderPaginationUniversal({
+    container,
+    currentPage,
+    totalPages,
+    mode: 'neighbors',
+    classes: {
+      page: 'exercises__page',
+      active: 'active',
+    },
+    scrollToTop: true,
+    scrollTarget: '.exercises',
+    onPageChange(page) {
+      return loadExercisesList({ page });
+    },
+  });
 }
 
 function handleExerciseItemClick(listEl) {
@@ -205,28 +285,9 @@ async function handleExcersiseModalOpen(event) {
   }
 
   openModal(content);
-
   try {
     await initExerciseModal(closeModal);
   } catch (error) {
     console.error('Error initializing exercise modal:', error);
   }
-}
-
-export function renderExercisesPagination(currentPage, totalPages) {
-  const container = REFS.exercisesPagination;
-
-  renderPaginationUniversal({
-    container,
-    currentPage,
-    totalPages,
-    mode: 'neighbors',
-    classes: {
-      page: 'exercises__page',
-      active: 'active',
-    },
-    onPageChange(page) {
-      loadExercisesList({ page });
-    },
-  });
 }

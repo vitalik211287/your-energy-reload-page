@@ -4,6 +4,8 @@
  * blocks the page scroll, closes on Escape
  */
 
+import { startRenderFavorites } from './favorites-page';
+
 let refs = null;
 let isInitialized = false;
 const modalTypes = {};
@@ -118,6 +120,8 @@ export function closeModal() {
   if (refs && refs.body) {
     refs.body.innerHTML = '';
   }
+  const checkExcesicerender = document.querySelector('.favorites-list');
+  if (checkExcesicerender) startRenderFavorites();
 }
 
 function isConfirmModalOpen() {
