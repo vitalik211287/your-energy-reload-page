@@ -1,51 +1,98 @@
 import { YourEnergyAPI } from './api';
 import { showError } from './iziToast-helper'; // якщо не хочеш тости — можеш замінити на console.error
 import { renderPaginationUniversal } from './pagination.js';
+import iziToast from 'izitoast';
 
 const api = new YourEnergyAPI();
+console.dir(api);
 
 function getPageLimit() {
   return window.innerWidth < 768 ? 8 : 10;
 }
 
+
+// мінімальний стан
+// (щоб пагінація знала останній filter/type)
+let currentQuery = {
+  type: 'body-parts',
+  filter: 'waist',
+  keyword: '',
+};
+
+
 // Поточний стан
 let currentPage = 1;
 let currentTotalPages = 1;
 
-
-export async function initExercisesList() {
-  const listEl = document.querySelector('.js-exercises-list');
-  if (!listEl) return;
-
-  
-  // перше завантаження
-  await loadExercisesList({ page: 1 });
+// анти-гонка запитів
+let lastRequestId = 0;
 
 
-}
+// тимчасова, щоб відмальовувалась на сторінці без кліку
+
+loadExercisesList({ page: 1 });
 
 
-export async function loadExercisesList({ page = 1, keyword = '' } = {}) {
+export async function loadExercisesList({
+  page = 1,
+  type,
+  filter,
+  keyword = '',
+} = {}) {
   const listEl = document.querySelector('.js-exercises-list');
   if (!listEl) return;
 
   const limit = getPageLimit();
 
-  const { type, filter } = getTypeAndFilterFromUI();
-  const params = buildExercisesParams({ page, limit, type, filter, keyword });
+  // 1) якщо прилетіли type/filter/keyword — зберігаємо як актуальні
+  if (type) currentQuery.type = type;
+  if (filter) currentQuery.filter = filter;
+  if (keyword !== undefined) currentQuery.keyword = keyword;
 
-  console.log('ACTIVE TYPE:', type);
-  console.log('FILTER VALUE:', filter);
+  const activeType = currentQuery.type;
+  const activeFilter = currentQuery.filter;
+  const activeKeyword = currentQuery.keyword;
+
+  const params = buildExercisesParams({
+    page,
+    limit,
+    type: activeType,
+    filter: activeFilter,
+    keyword: activeKeyword,
+  });
+
+  console.log('ACTIVE TYPE:', activeType);
+  console.log('FILTER VALUE:', activeFilter);
   console.log('EXERCISES PARAMS:', params);
+
+  // 2) анти-гонка
+  const requestId = ++lastRequestId;
 
   try {
     const data = await api.getExercises(params);
+    console.log(data);
+
+    // якщо це старий запит — нічого не робимо
+    if (requestId !== lastRequestId) return;
+
     const items = data.results || [];
     currentPage = data.page || page;
     currentTotalPages = data.totalPages || 1;
 
     renderExercisesList(listEl, items);
     renderExercisesPagination(currentPage, currentTotalPages);
+
+    // 3) оновлюємо URL ТІЛЬКИ коли прийшли нові type/filter (тобто клік по категорії)
+    if (type || filter || keyword) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('type', activeType);
+      url.searchParams.set('filter', activeFilter);
+
+      if (activeKeyword) url.searchParams.set('keyword', activeKeyword);
+      else url.searchParams.delete('keyword');
+
+      window.history.pushState({}, '', url);
+    }
   } catch (err) {
     console.error('Failed to load exercises:', err);
     if (typeof showError === 'function') {
@@ -59,53 +106,10 @@ export async function loadExercisesList({ page = 1, keyword = '' } = {}) {
   }
 }
 
-
-function getTypeAndFilterFromUI() {
-  const urlParams = new URLSearchParams(window.location.search);
-
-  // type може прийти з Categories як type,
-  // або у тебе старий формат tab=muscles
-  const typeFromUrl = urlParams.get('type') || urlParams.get('tab');
-
-  // активний таб у розмітці
-  const activeTab =
-    document.querySelector('.exercises__tab--active')?.dataset.tab ||
-    typeFromUrl ||
-    'body-parts';
-
-  // filter приходить з Categories (waist / abs / body weight / і т.д.)
-  const filterFromUrl = urlParams.get('filter');
-
-  const fallbackFilter = getDefaultFilterForType(activeTab);
-
-  return {
-    type: activeTab,
-    filter: filterFromUrl || fallbackFilter,
-  };
-}
-
-/**
- * Значення за замовчуванням, якщо немає filter в URL
- */
-function getDefaultFilterForType(type) {
-  switch (type) {
-    case 'muscles':
-      return 'abs';
-    case 'equipment':
-      return 'body weight';
-    case 'body-parts':
-    default:
-      return 'waist';
-  }
-}
-
-
 function buildExercisesParams({ page, limit, type, filter, keyword }) {
   const params = { page, limit };
 
-  if (keyword) {
-    params.keyword = keyword;
-  }
+  if (keyword) params.keyword = keyword;
 
   switch (type) {
     case 'body-parts':
@@ -141,9 +145,8 @@ function renderExercisesList(listEl, items) {
   listEl.innerHTML = markup;
 }
 
-
 function createExerciseCardMarkup(item) {
-  const { name, burnedCalories, bodyPart, target, rating } = item;
+  const { name, burnedCalories, bodyPart, target, rating, time } = item;
 
   return `
       <li class="exercises__item">
@@ -155,7 +158,6 @@ function createExerciseCardMarkup(item) {
               <span class="exercises__meta-value">
                 <svg class="star"></svg>
               </span>
-              <!-- <svg class="star"></svg> -->
             </div>
           </div>
           <button type="button" class="exercises__start-btn js-exercises-start">
@@ -172,7 +174,7 @@ function createExerciseCardMarkup(item) {
         <div class="exercises__item-bottom">
           <p class="exercises__meta">
             <span class="exercises__meta-label">Burned calories:</span>
-            <span class="exercises__meta-value">${burnedCalories}</span>
+            <span class="exercises__meta-value">${burnedCalories} / ${time}</span>
           </p>
           <p class="exercises__meta">
             <span class="exercises__meta-label">Body part:</span>
@@ -189,6 +191,7 @@ function createExerciseCardMarkup(item) {
 
 export function renderExercisesPagination(currentPage, totalPages) {
   const container = document.querySelector('.js-exercises-pagination');
+  if (!container) return;
 
   renderPaginationUniversal({
     container,
@@ -200,38 +203,10 @@ export function renderExercisesPagination(currentPage, totalPages) {
       active: 'active',
     },
     scrollToTop: true,
-    scrollTarget: '.exercises', // або '#exercises', дивись як у тебе в HTML
+    scrollTarget: '.exercises',
     onPageChange(page) {
+      // важливо: НЕ передаємо type/filter → береться currentQuery
       return loadExercisesList({ page });
     },
   });
 }
-
-// import { renderPaginationUniversal } from './pagination.js';
-
-// function renderPagination(currentPage, totalPages) {
-//   const container = document.getElementById('pagination');
-//   if (!container) return;
-
-//   renderPaginationUniversal({
-//     container,
-//     currentPage,
-//     totalPages,
-//     mode: 'full',
-//     classes: {
-//       page: 'pagination-page',
-//       active: 'active',
-//     },
-//     scrollToTop: true,
-//     scrollTarget: '#exercise-categories',
-//     // або '.filters' / '.categories' — постав свій реальний селектор секції
-
-//     onPageChange(page) {
-//       if (page === activePage) return;
-//       activePage = page;
-
-//       // важливо: повертаємо проміс, щоб скрол був ПІСЛЯ рендера
-//       return getCategories(activeFilter, page, PAGE_LIMIT);
-//     },
-//   });
-// }
