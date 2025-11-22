@@ -3,6 +3,7 @@
 .header {
   padding-top: 20px;
   padding-bottom: 12px;
+  width: 100%;
 }
 
 .header__container {
@@ -39,7 +40,7 @@
   column-gap: 16px;
 }
 
-.socials {
+.header .socials {
   display: none;
   align-items: center;
   column-gap: 12px;
@@ -139,7 +140,7 @@
     color: var(--color-header-bg-dark);
   }
 
-  .socials {
+  .header .socials {
     display: flex;
   }
 
@@ -153,10 +154,6 @@
 }
 
 @media screen and (min-width: 1440px) {
-    .container {
-    max-width: 1440px;
-    padding: 0 96px;
-  }
 
   .nav__link {
     padding: 12px 34px;
@@ -168,7 +165,7 @@
     padding: 6px;
   }
 
-    .socials__link {
+  .socials__link {
     width: 44px;
     height: 44px;
   }

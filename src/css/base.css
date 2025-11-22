@@ -14,14 +14,22 @@
   --color-header-border-light: #e8e8e8;
   --color-header-link-hover-bg: rgba(255, 255, 255, 0.12);
   --bg-loader-color: rgba(0, 0, 0, 0.9);
+  --bg-modal-overlay: rgba(4, 4, 4, 0.4);
+  --color-secondary: #f4f4f466;
+  --color-accent: #eea10c;
+  --color-text-placeholder: #f4f4f499;
+  --btn-hover-color: #e0e0e0;
+  /* animation */
+  --ease-calm: cubic-bezier(0.25, 0.8, 0.25, 1);
+  --anim-speed: 0.5s;
 }
 
 body {
   font-family: var(--font-main);
   line-height: 1.5;
   color: #2f2f37;
+  background-color:  #F4F4F4;
   margin: 0 auto;
-  max-width: 1200px;
   display: flex;
   flex-direction: column;
   align-items: center;

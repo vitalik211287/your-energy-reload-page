@@ -1,0 +1,145 @@
+.hero-title {
+  font-weight: 400;
+  font-size: 38px;
+  line-height: 1.16;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+
+.hero-title span {
+  font-style: italic;
+}
+
+.hero-title::before {
+  content: '';
+  display: inline-block;
+  width: 38px;
+  height: 38px;
+  margin-right: 10px;
+  /* background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><use xlink:href="../img/icons.svg#icon-sun"/></svg>'); */
+  background-image: url('../img/hero/hero-star.png');
+  background-size: cover;
+  /* background-position: center 5px; */
+}
+
+.hero-text {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.29;
+  letter-spacing: -0.02em;
+  color: var(--color-header-bg-dark);
+
+  max-width: 578px;
+}
+
+.hero-wrapper {
+  margin-bottom: 20px;
+}
+
+.hero-img-and-list {
+  display: none;
+}
+
+.hero-list-desktop {
+  display: none;
+}
+
+.hero-img {
+  width: 100%;
+  border-radius: 30px;
+  margin-bottom: 20px;
+}
+
+.hero-list {
+  display: flex;
+  justify-content: space-between;
+}
+
+.hero-list-item {
+  border: 1px solid var(--color-header-bg-dark);
+  border-radius: 30px;
+  padding: 4px 12px;
+
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.29;
+  color: var(--color-header-bg-dark);
+}
+
+@media screen and (min-width: 768px) {
+  .hero-title {
+    font-size: 74px;
+    line-height: 1;
+  }
+
+  .hero-title::before {
+    width: 60px;
+    height: 60px;
+  }
+
+  .hero-text {
+    font-size: 18px;
+    line-height: 1.33;
+
+  }
+
+  .hero-wrapper {
+    margin-bottom: 32px;
+  }
+
+  .hero-img {
+    margin-bottom: 16px;
+  }
+
+  .hero-list-item {
+    font-size: 16px;
+    line-height: 1.5;
+    padding: 4px 16px;
+  }
+
+  .hero-list {
+    justify-content: flex-end;
+    gap: 8px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .hero-title {
+    font-size: 74px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    max-width: 639px;
+  }
+
+  .hero-text {
+    max-width: 528px;
+  }
+
+  .hero-img-and-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 32px;
+  }
+
+  .hero-list-desktop {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: right;
+    gap: 8px;
+    max-width: 197px;
+  }
+
+  .hero-wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+
+
+  .hero-list {
+    display: none;
+  }
+
+
+}
