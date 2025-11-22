@@ -7,6 +7,7 @@ const api = new YourEnergyAPI();
 
 function renderEmptyMessage() {
   const container = document.querySelector('.favorites-wrapper');
+  if (!container) return;
 
   const existingList = container.querySelector('.favorites-list');
   if (existingList) {
@@ -38,6 +39,7 @@ async function loadFavoritesData(ids) {
 
 async function renderFavorites(arr) {
   const container = document.querySelector('.favorites-wrapper');
+  if (!container) return;
 
   const emptyDiv = container.querySelector('.favorites-empty');
   if (emptyDiv) {
