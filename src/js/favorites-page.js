@@ -1,47 +1,53 @@
 import { getFavorites, removeFavorite } from './favorites-btn.js';
+import { YourEnergyAPI } from './api.js';
+import { REFS } from './constants.js';
+import { createExerciseCard } from './exercises-list.js';
 
-const refs = {
-  quoteContainer: document.querySelector('.favorites-wrapper .quote'),
-  listContainer: document.querySelector('.favorites-list'),
-};
-const favorites = getFavorites();
+const api = new YourEnergyAPI();
 
-if (favorites && refs.listContainer && favorites.length === 0) {
-  refs.listContainer.innerHTML = `
+function renderEmptyMessage() {
+  REFS.favoritesList.innerHTML = `
     <div class="favorites-empty">
       <p>It appears that you haven’t added any exercises to your favorites yet.</p>
-      <p>To get started, you can add exercises that you like to your favorites for easier access in the future.</p>
+      <p>To get started, add exercises that you like to your favorites for easier access.</p>
     </div>`;
-} else if(Array.isArray(favorites) && refs.listContainer) {
-  renderFavorites(favorites);
 }
 
-function renderFavorites(favorites) {
-  refs.listContainer.innerHTML = '';
+async function loadFavoritesData(ids) {
+  const results = [];
 
-  favorites.forEach(item => {
-    const card = document.createElement('div');
-    card.classList.add('favorite-card');
-    card.setAttribute('data-id', item.id);
+  for (const id of ids) {
+    try {
+      const exercise = await api.getExerciseById(id);
+      if (exercise) results.push(exercise);
+    } catch (err) {
+      console.error(`Failed to load exercise ${id}`, err);
+    }
+  }
+  return results;
+}
 
-    card.innerHTML = `
-      <img src="${item.gifUrl}" alt="${item.name}" class="favorite-img">
-      <h3 class="favorite-title">${item.name}</h3>
-      <p class="favorite-info"><b>Target:</b> ${item.target}</p>
-      <p class="favorite-info"><b>Body part:</b> ${item.bodyPart}</p>
-      <p class="favorite-info"><b>Equipment:</b> ${item.equipment}</p>
+function renderFavorites(arr) {
+  REFS.favoritesList.innerHTML = '';
 
-      <button class="delete-btn" data-id="${item.id}">🗑</button>
-    `;
+  arr.forEach(item => {
+    const cardHTML = createExerciseCard(item);
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = cardHTML.trim();
+    const cardElement = wrapper.firstElementChild;
 
-    refs.listContainer.appendChild(card);
+    const deleteBtn = cardElement.querySelector('.favorites-delete-btn');
+    if (deleteBtn) {
+      deleteBtn.addEventListener('click', () => {
+        removeFavorite(item.id);
+        updateFavoritesPage();
+      });
+    }
 
-    const deleteBtn = card.querySelector('.delete-btn');
-
-    deleteBtn.addEventListener('click', () => {
-      removeFavorite(item.id);
-      const updated = getFavorites();
-      renderFavorites(updated);
-    });
+    REFS.favoritesList.appendChild(cardElement);
   });
 }
+
+const favorites = getFavorites();
+if (REFS.favoritesList)
+  favorites.length ? renderFavorites(favorites) : renderEmptyMessage();

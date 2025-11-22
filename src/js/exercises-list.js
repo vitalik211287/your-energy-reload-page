@@ -1,6 +1,14 @@
 import { YourEnergyAPI } from './api';
 import { showError } from './iziToast-helper';
 import { renderPaginationUniversal } from './pagination.js';
+import { REFS } from './constants.js';
+import { injectSchemaExercises } from './seo-function.js';
+import { openModal, closeModal } from './modal-template.js';
+import {
+  getExerciseModalContent,
+  initExerciseModal,
+} from './modal-exercise-content.js';
+import { MODAL_TYPES } from './constants.js';
 
 const api = new YourEnergyAPI();
 
@@ -8,92 +16,72 @@ function getPageLimit() {
   return window.innerWidth < 768 ? 8 : 10;
 }
 
-// --------------------
-// МІНІМАЛЬНИЙ СТАН
-// (щоб пагінація знала останній filter/type)
-// --------------------
-let currentQuery = {
-  type: 'body-parts',
-  filter: 'waist',
-  keyword: '',
-};
-
 let currentPage = 1;
 let currentTotalPages = 1;
 
-// анти-гонка запитів
-let lastRequestId = 0;
+export async function initExercisesList() {
+  const listEl = REFS.exercisesList;
+  if (!listEl) return;
 
+  await loadExercisesList({ page: 1 });
+}
 
-export async function loadExercisesList({
-  page = 1,
-  type,
-  filter,
-  keyword = '',
-} = {}) {
-  const listEl = document.querySelector('.js-exercises-list');
+export async function loadExercisesList({ page = 1, keyword = '' } = {}) {
+  const listEl = REFS.exercisesList;
   if (!listEl) return;
 
   const limit = getPageLimit();
 
-  // 1) якщо прилетіли type/filter/keyword — зберігаємо як актуальні
-  if (type) currentQuery.type = type;
-  if (filter) currentQuery.filter = filter;
-  if (keyword !== undefined) currentQuery.keyword = keyword;
-
-  const activeType = currentQuery.type;
-  const activeFilter = currentQuery.filter;
-  const activeKeyword = currentQuery.keyword;
-
-  const params = buildExercisesParams({
-    page,
-    limit,
-    type: activeType,
-    filter: activeFilter,
-    keyword: activeKeyword,
-  });
-
-  console.log('ACTIVE TYPE:', activeType);
-  console.log('FILTER VALUE:', activeFilter);
-  console.log('EXERCISES PARAMS:', params);
-
-  // 2) анти-гонка
-  const requestId = ++lastRequestId;
+  const { type, filter } = getTypeAndFilterFromUI();
+  const params = buildExercisesParams({ page, limit, type, filter, keyword });
 
   try {
     const data = await api.getExercises(params);
-
-    // якщо це старий запит — нічого не робимо
-    if (requestId !== lastRequestId) return;
-
     const items = data.results || [];
+    injectSchemaExercises(data);
     currentPage = data.page || page;
     currentTotalPages = data.totalPages || 1;
 
     renderExercisesList(listEl, items);
     renderExercisesPagination(currentPage, currentTotalPages);
-
-    // 3) оновлюємо URL ТІЛЬКИ коли прийшли нові type/filter (тобто клік по категорії)
-    if (type || filter || keyword) {
-      const url = new URL(window.location.href);
-      url.searchParams.set('type', activeType);
-      url.searchParams.set('filter', activeFilter);
-
-      if (activeKeyword) url.searchParams.set('keyword', activeKeyword);
-      else url.searchParams.delete('keyword');
-
-      window.history.pushState({}, '', url);
-    }
   } catch (err) {
     console.error('Failed to load exercises:', err);
-    if (typeof showError === 'function') {
-      showError(err.message || 'Failed to load exercises. Try again later.');
-    }
+    showError(err.message || 'Failed to load exercises. Try again later.');
+
     listEl.innerHTML = `
       <li class="exercises__item">
         <p>Failed to load exercises. Try again later.</p>
       </li>
     `;
+  }
+}
+
+function getTypeAndFilterFromUI() {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  const typeFromUrl = urlParams.get('type') || urlParams.get('tab');
+
+  const activeTab =
+    REFS.exercisesActiveTab?.dataset.tab || typeFromUrl || 'body-parts';
+
+  const filterFromUrl = urlParams.get('filter');
+  const fallbackFilter = getDefaultFilterForType(activeTab);
+
+  return {
+    type: activeTab,
+    filter: filterFromUrl || fallbackFilter,
+  };
+}
+
+function getDefaultFilterForType(type) {
+  switch (type) {
+    case 'muscles':
+      return 'abs';
+    case 'equipment':
+      return 'body weight';
+    case 'body-parts':
+    default:
+      return 'waist';
   }
 }
 
@@ -119,9 +107,6 @@ function buildExercisesParams({ page, limit, type, filter, keyword }) {
   return params;
 }
 
-/**
- * Рендер UL зі списком вправ
- */
 function renderExercisesList(listEl, items) {
   if (!items.length) {
     listEl.innerHTML = `
@@ -134,55 +119,102 @@ function renderExercisesList(listEl, items) {
 
   const markup = items.map(createExerciseCardMarkup).join('');
   listEl.innerHTML = markup;
+
+  handleExerciseItemClick(listEl);
 }
 
 function createExerciseCardMarkup(item) {
   const { name, burnedCalories, bodyPart, target, rating } = item;
 
   return `
-      <li class="exercises__item">
-        <div class="exercises__item-top">
-          <div class="exercises__item-info">
-            <span class="exercises__badge">Workout</span>
-            <div class="exercises__rating">
-              <span class="exercises__meta-key">${rating}</span>
-              <span class="exercises__meta-value">
-                <svg class="star"></svg>
-              </span>
-            </div>
+    <li class="exercises__item" data-exercise-id="${item._id}">
+      <div class="exercises__item-top">
+        <div class="exercises__item-info">
+          <span class="exercises__badge">Workout</span>
+          <div class="exercises__rating">
+            <span class="exercises__meta-key">${rating}</span>
+            <span class="exercises__meta-value">
+              <svg class="star"></svg>
+            </span>
           </div>
-          <button type="button" class="exercises__start-btn js-exercises-start">
-            Start
-            <svg class="arrow__icon"></svg>
-          </button>
         </div>
 
-        <div class="exercises__name-container">
-          <svg class="exercises__icon"></svg>
-          <h3 class="exercises__name">${name}</h3>
-        </div>
+        <button
+          type="button"
+          class="exercises__start-btn js-open-exercise"
+          data-exercise-id="${item._id}"
+        >
+          Start
+          <svg class="arrow__icon"></svg>
+        </button>
+      </div>
 
-        <div class="exercises__item-bottom">
-          <p class="exercises__meta">
-            <span class="exercises__meta-label">Burned calories:</span>
-            <span class="exercises__meta-value">${burnedCalories}</span>
-          </p>
-          <p class="exercises__meta">
-            <span class="exercises__meta-label">Body part:</span>
-            <span class="exercises__meta-value">${bodyPart}</span>
-          </p>
-          <p class="exercises__meta">
-            <span class="exercises__meta-label">Target:</span>
-            <span class="exercises__meta-value">${target}</span>
-          </p>
-        </div>
-      </li>
+      <div class="exercises__name-container">
+        <svg class="exercises__icon"></svg>
+        <h3 class="exercises__name">${name}</h3>
+      </div>
+
+      <div class="exercises__item-bottom">
+        <p class="exercises__meta">
+          <span class="exercises__meta-label">Burned calories:</span>
+          <span class="exercises__meta-value">${burnedCalories}</span>
+        </p>
+        <p class="exercises__meta">
+          <span class="exercises__meta-label">Body part:</span>
+          <span class="exercises__meta-value">${bodyPart}</span>
+        </p>
+        <p class="exercises__meta">
+          <span class="exercises__meta-label">Target:</span>
+          <span class="exercises__meta-value">${target}</span>
+        </p>
+      </div>
+    </li>
   `;
 }
 
+function handleExerciseItemClick(listEl) {
+  const startButtons = listEl.querySelectorAll(
+    '.exercises__start-btn[data-exercise-id]'
+  );
+
+  startButtons.forEach(button => {
+    if (button.hasAttribute('data-click-handler-attached')) {
+      return;
+    }
+
+    button.addEventListener('click', handleExcersiseModalOpen);
+    button.setAttribute('data-click-handler-attached', 'true');
+  });
+}
+
+async function handleExcersiseModalOpen(event) {
+  const button = event.currentTarget;
+  const exerciseId = button.getAttribute('data-exercise-id');
+
+  if (!exerciseId) {
+    console.error('Exercise ID is missing');
+    return;
+  }
+
+  sessionStorage.setItem('exerciseModalExerciseId', exerciseId);
+
+  const content = getExerciseModalContent();
+  if (!content) {
+    console.error('Failed to get exercise modal content');
+    return;
+  }
+
+  openModal(content);
+
+  try {
+    await initExerciseModal(closeModal);
+  } catch (error) {
+    console.error('Error initializing exercise modal:', error);
+  }
+}
+
 export function renderExercisesPagination(currentPage, totalPages) {
-  const container = document.querySelector('.js-exercises-pagination');
-  if (!container) return;
+  const container = REFS.exercisesPagination;
 
   renderPaginationUniversal({
     container,
@@ -193,11 +225,8 @@ export function renderExercisesPagination(currentPage, totalPages) {
       page: 'exercises__page',
       active: 'active',
     },
-    scrollToTop: true,
-    scrollTarget: '.exercises',
     onPageChange(page) {
-      // важливо: НЕ передаємо type/filter → береться currentQuery
-      return loadExercisesList({ page });
+      loadExercisesList({ page });
     },
   });
 }

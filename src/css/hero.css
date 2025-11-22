@@ -48,6 +48,7 @@
   width: 100%;
   border-radius: 30px;
   margin-bottom: 20px;
+  background: #fff;
 }
 
 .hero-list {
@@ -70,11 +71,13 @@
   .hero-title {
     font-size: 74px;
     line-height: 1;
+    width: 650px;
   }
 
   .hero-title::before {
     width: 60px;
     height: 60px;
+    margin-right: 6px;
   }
 
   .hero-text {
@@ -109,7 +112,7 @@
     font-weight: 400;
     line-height: 1;
     letter-spacing: -0.02em;
-    max-width: 639px;
+    max-width: 650px;
   }
 
   .hero-text {
@@ -141,5 +144,9 @@
     display: none;
   }
 
+  .hero-mini-img {
+    border-radius: 20px;
+    background: #fff;
+  }
 
 }

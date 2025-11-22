@@ -10,6 +10,7 @@ import './js/categories.js';
 import './js/mobile-menu.js';
 import './js/filters.js';
 import './js/footer.js';
+import './js/scroll-up.js';
 import { cancelLoader } from './js/loader.js';
 import { registerModalType, initModalButtons } from './js/modal-template.js';
 import { MODAL_TYPES } from './js/constants.js';
@@ -27,10 +28,10 @@ import { initExercisesSearch } from './js/exercises-search.js';
 // ref.loadMoreButton.addEventListener('click', loadMore);
 
 // if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    // cancelLoader();
-    initModals();
-  });
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => cancelLoader(), 200);
+  initModals();
+});
 // } else {
 //   cancelLoader();
 //   initModals();
@@ -38,7 +39,11 @@ import { initExercisesSearch } from './js/exercises-search.js';
 
 function initModals() {
   registerModalType(MODAL_TYPES.RATING, getRatingModalContent, initRatingModal);
-  // registerModalType(MODAL_TYPES.EXERCISE, getExerciseModalContent, initExerciseModal);
+  registerModalType(
+    MODAL_TYPES.EXERCISE,
+    getExerciseModalContent,
+    initExerciseModal
+  );
 
   initModalButtons();
 }
