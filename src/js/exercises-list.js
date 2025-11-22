@@ -234,7 +234,7 @@ export function renderExercisesList(listEl, items, isFavorite = false) {
 //   `;
 // }
 function createExerciseCardMarkup(item, isFavorite = false) {
-  const { name, burnedCalories, bodyPart, target, rating, _id } = item;
+  const { name, burnedCalories, bodyPart, target, time, rating, _id } = item;
   const actionMarkup = isFavorite
     ? `<button type="button" class="favorites-delete-btn" data-id="${_id}">
          <svg class="favorites-icon-trash" width="16" height="16" aria-label="Remove from favorites">
