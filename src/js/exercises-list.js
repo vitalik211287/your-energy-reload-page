@@ -30,7 +30,7 @@ let lastRequestId = 0;
 let lastEmptyToastKey = '';
 
 // тимчасова, щоб відмальовувалась на сторінці без кліку
-loadExercisesList({ page: 1 });
+// loadExercisesList({ page: 1 });
 
 export async function loadExercisesList({
   page = 1,
