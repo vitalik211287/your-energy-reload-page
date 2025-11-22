@@ -106,7 +106,7 @@
   }
 
   .favorites-list .exercises__item {
-    min-height: 141px;
+    height: 141px;
     width: 405px;
   }
 
