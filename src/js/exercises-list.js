@@ -179,7 +179,7 @@ function createExerciseCardMarkup(item, isFavorite = false) {
          <span class="exercises__meta-key">${rating}</span>
          <span class="exercises__meta-value">
            <svg class="star" width="18" height="18">
-             <use href="./src/img/sprite.svg#icon-star"></use>
+             <use href="./src/img/star"></use>
            </svg>
          </span>
        </div>`;
@@ -201,14 +201,14 @@ function createExerciseCardMarkup(item, isFavorite = false) {
         >
           Start
           <svg class="arrow__icon" width="16" height="16">
-             <use href="./src/img/sprite.svg#icon-arrow"></use>
+             <use href="./src/img/arrow-right.svg"></use>
           </svg>
         </button>
       </div>
 
       <div class="exercises__name-container">
         <svg class="exercises__icon" width="24" height="24">
-           <use href="./src/img/sprite.svg#icon-running-man"></use>
+           <use href="./src/img/runing-man.svg"></use>
         </svg>
         <h3 class="exercises__name">${name}</h3>
       </div>
