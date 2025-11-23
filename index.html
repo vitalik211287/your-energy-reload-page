@@ -1,36 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/your-energy/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your energy</title>
+    <meta
+      name="description"
+      content="A free database of sports exercises, an overview of equipment and a designer of training programs. Exercise correctly with Your energy."
+    />
+    <meta
+      name="keywords"
+      content="sport, fitness, exercises, training program, gym, weight loss"
+    />
+    <link rel="canonical" href="https://studentvlad5.github.io/your-energy/" />
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/your-energy/favicon.png" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Your energy</title>
-  <meta name="description"
-    content="A free database of sports exercises, an overview of equipment and a designer of training programs. Exercise correctly with Your energy." />
-  <meta name="keywords" content="sport, fitness, exercises, training program, gym, weight loss" />
-  <link rel="canonical" href="https://studentvlad5.github.io/your-energy/" />
+    <meta
+      property="og:title"
+      content="Your energy: Your guide in the world of sports"
+    />
+    <meta
+      property="og:description"
+      content="Create your training program for free."
+    />
+    <meta
+      property="og:image"
+      content="https://studentvlad5.github.io/your-energy/hero.webp"
+    />
+    <meta property="og:type" content="website" />
+    <link
+      rel="preload"
+      href="/your-energy/assets/hero-mobile-BQbSAEYk.webp"
+      as="image"
+      media="(max-width: 767px)"
+    />
 
-  <meta property="og:title" content="Your energy: Your guide in the world of sports" />
-  <meta property="og:description" content="Create your training program for free." />
-  <meta property="og:image" content="https://studentvlad5.github.io/your-energy/hero.webp" />
-  <meta property="og:type" content="website" />
-  <link rel="preload" href="/your-energy/assets/hero-mobile-BQbSAEYk.webp" as="image" media="(max-width: 767px)" />
+    <link
+      rel="preload"
+      href="/your-energy/assets/hero-tablet-Dp-cgR5C.webp"
+      as="image"
+      media="(min-width: 768px) and (max-width: 1439px)"
+    />
 
-  <link rel="preload" href="/your-energy/assets/hero-tablet-Dp-cgR5C.webp" as="image"
-    media="(min-width: 768px) and (max-width: 1439px)" />
+    <link
+      rel="preload"
+      href="/your-energy/assets/hero-desktop-BIO0bz5Q.webp"
+      as="image"
+      media="(min-width: 1440px)"
+    />
 
-  <link rel="preload" href="/your-energy/assets/hero-desktop-BIO0bz5Q.webp" as="image" media="(min-width: 1440px)" />
+    <script type="module" crossorigin src="/your-energy/assets/vendor-3BNOZKAJ.js"></script>
+    <script type="module" crossorigin src="/your-energy/assets/main-DEkhwj5E.js"></script>
+    <link rel="stylesheet" crossorigin href="/your-energy/assets/vendor-D_nxXpU-.css">
+    <link rel="stylesheet" crossorigin href="/your-energy/assets/main-BKRFloUP.css">
+  </head>
 
-  <script type="module" crossorigin src="/your-energy/assets/vendor-3BNOZKAJ.js"></script>
-  <script type="module" crossorigin src="/your-energy/assets/main-DEkhwj5E.js"></script>
-  <link rel="stylesheet" crossorigin href="/your-energy/assets/vendor-D_nxXpU-.css">
-  <link rel="stylesheet" crossorigin href="/your-energy/assets/main-BKRFloUP.css">
-</head>
-
-
-<body class="fixedClass">
-  <header class="header">
+  <body class="fixedClass">
+    <header class="header">
   <div class="container header__container">
     <nav class="nav">
       <a class="nav__logo-link" href="./index.html" aria-label="Your Energy home">
@@ -84,8 +110,8 @@
 </script>
 
 
-  <main>
-    <section class="section">
+    <main>
+      <section class="section">
   <div class="container">
     <div class="hero-wrapper">
       <div class="hero-title-and-text">
@@ -149,7 +175,8 @@
   </div>
 </section>
 
-    <section class="filters">
+      <section class="filters">
+  <h2 class="hidden">Filters</h2>
   <div class="container">
     <div class="filters__header">
       <h2 class="filters__title">
@@ -225,7 +252,7 @@
   </div>
 </section>
 
-    <div class="exercises hidden" id="exercises">
+      <div class="exercises hidden" id="exercises">
   <div class="exercises__container">
     <ul class="exercises__list js-exercises-list"></ul>
 
@@ -237,16 +264,20 @@
   </div>
 </div>
 
-    <!-- <div id="cards-box">
+      <div id="cards-box">
   <div id="cards-container"></div>
   <div id="pagination"></div>
 </div>
- -->
-    <!-- <div class="sidebar">
+
+      <div id="equipment-box" class="exercises hidden">
+  <h3>Sorry. No equipment available</h3>
+</div>
+
+      <div class="sidebar container">
   <div class="quote-of-the-day">
     <div class="quote-of-the-day__icon-wrap">
       <svg class="quote-of-the-day__run-icon" width="20" height="20">
-        <use href="./img/icons.svg#icon-run"></use>
+        <use href="/your-energy/assets/icons-CzYEQ2n2.svg#icon-run"></use>
       </svg>
     </div>
 
@@ -254,7 +285,7 @@
       <div class="quote-of-the-day__header">
         <h2 class="quote-of-the-day__title">Quote of the day</h2>
         <svg class="quote-of-the-day__commas" width="20" height="20">
-          <use href="./img/icons.svg#icon-quote"></use>
+          <use href="/your-energy/assets/icons-CzYEQ2n2.svg#icon-quote"></use>
         </svg>
       </div>
 
@@ -268,24 +299,15 @@
   <picture class="sidebar__photo-card">
     <source
       media="(min-width: 1440px)"
-      srcset="
-        ./img/sidebar-img/sidebar-desk@1x.jpg 1x,
-        ./img/sidebar-img/sidebar-desk@2x.jpg 2x
-      "
+      srcset="/your-energy/assets/sidebar-desk@1x-DziFnyfO.jpg 1x, /your-energy/assets/sidebar-desk@2x-CrtYVfYA.jpg 2x"
     />
     <source
       media="(min-width: 768px)"
-      srcset="
-        ./img/sidebar-img/sidebar-tabl@1x.jpg 1x,
-        ./img/sidebar-img/sidebar-tabl@2x.jpg 2x
-      "
+      srcset="/your-energy/assets/sidebar-tabl@1x-CKFYBj0n.jpg 1x, /your-energy/assets/sidebar-tabl@2x-QkYUDVVj.jpg 2x"
     />
     <img
-      src="./img/sidebar-img/sidebar-mob@1x.jpg"
-      srcset="
-        ./img/sidebar-img/sidebar-mob@1x.jpg 1x,
-        ./img/sidebar-img/sidebar-mob@2x.jpg 2x
-      "
+      src="/your-energy/assets/sidebar-mob@1x-DHcvyJVs.jpg"
+      srcset="/your-energy/assets/sidebar-mob@1x-DHcvyJVs.jpg 1x, /your-energy/assets/sidebar-mob@2x-Bif0Yqoh.jpg 2x"
       alt="Fitness workout motivation"
       loading="lazy"
       width="335"
@@ -298,7 +320,7 @@
     <div class="sidebar__daily-norm-wrapper">
       <div class="sidebar__daily-norm-icon">
         <svg class="sidebar__daily-norm-icon-svg" width="34" height="32">
-          <use href="./img/icons.svg#icon-dailynorm"></use>
+          <use href="/your-energy/assets/icons-CzYEQ2n2.svg#icon-dailynorm"></use>
         </svg>
       </div>
 
@@ -321,11 +343,10 @@
     </div>
   </div>
 </div>
- -->
-  </main>
 
+    </main>
 
-  <svg
+    <svg
   aria-hidden="true"
   style="position: absolute; width: 0; height: 0; overflow: hidden"
   xmlns="http://www.w3.org/2000/svg"
@@ -427,7 +448,7 @@
 </footer>
 
 
-  <template id="exercise-modal-template">
+    <template id="exercise-modal-template">
   <div class="exercise-modal">
     <div class="exercise-modal__loader">
       <div class="sport-loader"></div>
@@ -488,7 +509,7 @@
   </div>
 </template>
 
-  <div id="modal-template" class="modal-template hidden">
+    <div id="modal-template" class="modal-template hidden">
   <div class="modal-template__backdrop" data-modal-close></div>
   <div class="modal-template__content">
     <button
@@ -507,7 +528,7 @@
   </div>
 </div>
 
-  <div class="rating-modal">
+    <div class="rating-modal">
   <form class="rating-modal__form" id="rating-form">
     <div class="rating-modal__rating">
       <p class="rating-modal__label">Rating</p>
@@ -642,7 +663,7 @@
   </form>
 </div>
 
-  <div id="modal-confirm" class="modal-confirm hidden">
+    <div id="modal-confirm" class="modal-confirm hidden">
   <div class="modal-confirm__backdrop" data-confirm-close></div>
   <div class="modal-confirm__content">
     <p class="modal-confirm__message" data-confirm-message>
@@ -667,7 +688,7 @@
   </div>
 </div>
 
-  <div class="mobile-menu" data-menu>
+    <div class="mobile-menu" data-menu>
   <div class="mobile-menu__container">
     <button
       class="mobile-menu__close"
@@ -739,13 +760,8 @@
   </div>
 </div>
 
-  <!-- <div id="bg-loader">
-  <div id="loader-overlay" class="loader-overlay">
-    <div class="sport-loader"></div>
-  </div>
-</div>
- -->
-  <a href="#" class="scroll-up-btn" aria-label="Go to top">
+
+    <a href="#" class="scroll-up-btn" aria-label="Go to top">
   <!-- <svg class="icon-desktop" aria-hidden="true">
     <use href="src/img/arrow-top-right.svg"></use>
   </svg>
@@ -755,7 +771,7 @@
   </svg> -->
 </a>
 
-  <template id="exercise-modal-template">
+    <template id="exercise-modal-template">
   <div class="exercise-modal">
     <div class="exercise-modal__loader">
       <div class="sport-loader"></div>
@@ -816,7 +832,7 @@
   </div>
 </template>
 
-  <div id="modal-template" class="modal-template hidden">
+    <div id="modal-template" class="modal-template hidden">
   <div class="modal-template__backdrop" data-modal-close></div>
   <div class="modal-template__content">
     <button
@@ -835,7 +851,7 @@
   </div>
 </div>
 
-  <div class="rating-modal">
+    <div class="rating-modal">
   <form class="rating-modal__form" id="rating-form">
     <div class="rating-modal__rating">
       <p class="rating-modal__label">Rating</p>
@@ -970,7 +986,7 @@
   </form>
 </div>
 
-  <div id="modal-confirm" class="modal-confirm hidden">
+    <div id="modal-confirm" class="modal-confirm hidden">
   <div class="modal-confirm__backdrop" data-confirm-close></div>
   <div class="modal-confirm__content">
     <p class="modal-confirm__message" data-confirm-message>
@@ -995,7 +1011,7 @@
   </div>
 </div>
 
-  <div class="mobile-menu" data-menu>
+    <div class="mobile-menu" data-menu>
   <div class="mobile-menu__container">
     <button
       class="mobile-menu__close"
@@ -1067,13 +1083,13 @@
   </div>
 </div>
 
-  <div id="bg-loader">
+    <div id="bg-loader">
   <div id="loader-overlay" class="loader-overlay">
     <div class="sport-loader"></div>
   </div>
 </div>
 
-  <a href="#" class="scroll-up-btn" aria-label="Go to top">
+    <a href="#" class="scroll-up-btn" aria-label="Go to top">
   <!-- <svg class="icon-desktop" aria-hidden="true">
     <use href="src/img/arrow-top-right.svg"></use>
   </svg>
@@ -1084,6 +1100,5 @@
 </a>
 
 
-</body>
-
+  </body>
 </html>
