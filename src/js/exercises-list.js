@@ -59,11 +59,15 @@ export async function loadExercisesList({
 
   try {
     const data = await api.getExercises(params);
+console.log(data)
+
     if (requestId !== lastRequestId) return;
 
     const items = data.results || [];
     currentPage = data.page || page;
     currentTotalPages = data.totalPages || 1;
+
+    console.log(items);
 
     renderExercisesList(listEl, items);
     renderExercisesPagination(currentPage, currentTotalPages);
