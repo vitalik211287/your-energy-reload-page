@@ -1,54 +1,42 @@
 import { YourEnergyAPI } from './api';
-import { showError } from './iziToast-helper'; // якщо не хочеш тости — можеш замінити на console.error
+import { showError } from './iziToast-helper';
 import { renderPaginationUniversal } from './pagination.js';
 import iziToast from 'izitoast';
 import { openModal, closeModal } from './modal-template.js';
-import { startLoader, cancelLoader } from './loader.js'; // <-- додали лоадер
+import { startLoader, cancelLoader } from './loader.js';
 import {
   getExerciseModalContent,
   initExerciseModal,
 } from './modal-exercise-content.js';
 
 const api = new YourEnergyAPI();
-console.dir(api);
 
 function getPageLimit() {
   return window.innerWidth < 768 ? 8 : 10;
 }
 
-// мінімальний стан
-// (щоб пагінація знала останній filter/type/keyword)
 let currentQuery = {
   type: 'body-parts',
   filter: 'waist',
   keyword: '',
 };
 
-// Поточний стан
 let currentPage = 1;
 let currentTotalPages = 1;
-
-// анти-гонка запитів
 let lastRequestId = 0;
-
-// щоб не спамити тостом "No results" при тих самих параметрах
 let lastEmptyToastKey = '';
-
-// тимчасова, щоб відмальовувалась на сторінці без кліку
-// loadExercisesList({ page: 1 });
 
 export async function loadExercisesList({
   page = 1,
   type,
   filter,
-  keyword, // <-- ВАЖЛИВО: без дефолту '' щоб пагінація не скидала пошук
+  keyword,
 } = {}) {
   const listEl = document.querySelector('.js-exercises-list');
   if (!listEl) return;
 
   const limit = getPageLimit();
 
-  // 1) якщо прилетіли type/filter/keyword — зберігаємо як актуальні
   if (type !== undefined) currentQuery.type = type;
   if (filter !== undefined) currentQuery.filter = filter;
   if (keyword !== undefined) currentQuery.keyword = keyword;
@@ -65,15 +53,12 @@ export async function loadExercisesList({
     keyword: activeKeyword,
   });
 
-  // 2) анти-гонка
   const requestId = ++lastRequestId;
 
   startLoader();
 
   try {
     const data = await api.getExercises(params);
-
-    // якщо це старий запит — нічого не робимо
     if (requestId !== lastRequestId) return;
 
     const items = data.results || [];
@@ -89,7 +74,6 @@ export async function loadExercisesList({
       if (emptyKey !== lastEmptyToastKey) {
         lastEmptyToastKey = emptyKey;
 
-        // показуємо лише якщо користувач щось змінював/шукає
         if (activeKeyword || type !== undefined || filter !== undefined) {
           iziToast.warning({
             title: 'No results',
@@ -104,7 +88,6 @@ export async function loadExercisesList({
       lastEmptyToastKey = '';
     }
 
-    // 3) оновлюємо URL тільки коли реально прийшли нові параметри
     const shouldUpdateUrl =
       type !== undefined || filter !== undefined || keyword !== undefined;
 
@@ -121,7 +104,6 @@ export async function loadExercisesList({
   } catch (err) {
     console.error('Failed to load exercises:', err);
 
-    // якщо це старий запит — не чіпаємо UI
     if (requestId !== lastRequestId) return;
 
     if (typeof showError === 'function') {
@@ -140,7 +122,6 @@ export async function loadExercisesList({
       </li>
     `;
   } finally {
-    // лоадер ховаємо тільки якщо це актуальний запит
     if (requestId === lastRequestId) {
       cancelLoader();
     }
@@ -186,67 +167,19 @@ export function renderExercisesList(listEl, items, isFavorite = false) {
   handleExerciseItemClick(listEl);
 }
 
-// function createExerciseCardMarkup(item) {
-//   const { name, burnedCalories, bodyPart, target, rating } = item;
-
-//   return `
-//     <li class="exercises__item" data-exercise-id="${item._id}">
-//       <div class="exercises__item-top">
-//         <div class="exercises__item-info">
-//           <span class="exercises__badge">Workout</span>
-//           <div class="exercises__rating">
-//             <span class="exercises__meta-key">${rating}</span>
-//             <span class="exercises__meta-value">
-//               <svg class="star"></svg>
-//             </span>
-//           </div>
-//         </div>
-
-//         <button
-//           type="button"
-//           class="exercises__start-btn js-open-exercise"
-//           data-exercise-id="${item._id}"
-//         >
-//           Start
-//           <svg class="arrow__icon"></svg>
-//         </button>
-//       </div>
-
-//       <div class="exercises__name-container">
-//         <svg class="exercises__icon"></svg>
-//         <h3 class="exercises__name">${name}</h3>
-//       </div>
-
-//       <div class="exercises__item-bottom">
-//         <p class="exercises__meta">
-//           <span class="exercises__meta-label">Burned calories:</span>
-//           <span class="exercises__meta-value">${burnedCalories}</span>
-//         </p>
-//         <p class="exercises__meta">
-//           <span class="exercises__meta-label">Body part:</span>
-//           <span class="exercises__meta-value">${bodyPart}</span>
-//         </p>
-//         <p class="exercises__meta">
-//           <span class="exercises__meta-label">Target:</span>
-//           <span class="exercises__meta-value">${target}</span>
-//         </p>
-//       </div>
-//     </li>
-//   `;
-// }
 function createExerciseCardMarkup(item, isFavorite = false) {
   const { name, burnedCalories, bodyPart, target, time, rating, _id } = item;
   const actionMarkup = isFavorite
     ? `<button type="button" class="favorites-delete-btn" data-id="${_id}">
          <svg class="favorites-icon-trash" width="16" height="16" aria-label="Remove from favorites">
-            <use href="/img/trash.svg"></use> 
+            <use href="./img/icons.svg#icon-trash"></use> 
          </svg>
        </button>`
     : `<div class="exercises__rating">
          <span class="exercises__meta-key">${rating}</span>
          <span class="exercises__meta-value">
            <svg class="star" width="18" height="18">
-             <use href="./src/img/sprite.svg#icon-star"></use>
+             <use href="./img/icons.svg#icon-star"></use>
            </svg>
          </span>
        </div>`;
@@ -268,14 +201,14 @@ function createExerciseCardMarkup(item, isFavorite = false) {
         >
           Start
           <svg class="arrow__icon" width="16" height="16">
-             <use href="./src/img/sprite.svg#icon-arrow"></use>
+             <use href="./img/icons.svg#icon-arrow"></use>
           </svg>
         </button>
       </div>
 
       <div class="exercises__name-container">
         <svg class="exercises__icon" width="24" height="24">
-           <use href="./src/img/sprite.svg#icon-running-man"></use>
+           <use href="./img/icons.svg#icon-running-man"></use>
         </svg>
         <h3 class="exercises__name">${name}</h3>
       </div>
@@ -314,7 +247,6 @@ export function renderExercisesPagination(currentPage, totalPages) {
     scrollToTop: true,
     scrollTarget: '.exercises',
     onPageChange(page) {
-      // важливо: НЕ передаємо type/filter/keyword → береться currentQuery
       return loadExercisesList({ page });
     },
   });
