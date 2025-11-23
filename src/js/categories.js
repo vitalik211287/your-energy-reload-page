@@ -4,6 +4,8 @@ import { handleCategoryCardClick } from './categories-card-click';
 import { cancelLoader, startLoader } from './loader';
 import { YourEnergyAPI } from './api';
 import { renderPaginationUniversal } from './pagination';
+import { loadExercisesList } from './exercises-list.js';
+import { setOpenExercises } from './state.js';
 export const fetchApi = new YourEnergyAPI();
 
 const PAGE_LIMIT = window.innerWidth < 768 ? 9 : 12;
@@ -12,7 +14,7 @@ const PAGE_LIMIT = window.innerWidth < 768 ? 9 : 12;
 let activeFilter = 'Muscles';
 let activePage = 1;
 
-async function getCategories(
+export async function getCategories(
   filter = activeFilter,
   page = 1,
   limit = PAGE_LIMIT
@@ -91,8 +93,8 @@ function renderCards(items) {
         <span>${safeFilter}</span>
       </div>
     `;
-    handleCategoryCardClick;
-    card.addEventListener('click', handleCategoryCardClick(item));
+    // handleCategoryCardClick;
+    card.addEventListener('click', () => handleCategoryCardClick(item));
     container.appendChild(card);
 
     const cardBody = card.querySelector('.card-body');
@@ -142,11 +144,21 @@ function clearPagination() {
   if (container) container.innerHTML = '';
 }
 
-// Callback on card click
 export function onCardBodyClick(nameValue) {
-  console.log('Clicked name:', nameValue);
-  // here need to add logic how to join categories and exercises
+  const searchBox = document.querySelector('.filters__search');
+  const categoriesBox = document.getElementById('cards-box');
+  const exercisesBox = document.getElementById('exercises');
+
+  const tabsContainer = document.querySelector('[data-filters-tabs]');
+  const activeTab = tabsContainer.querySelector('.filters__tab--active');
+  const activeFilterType = activeTab ? activeTab.dataset.filter : null;
+
+  if (categoriesBox) categoriesBox.classList.add('hidden');
+  if (exercisesBox) exercisesBox.classList.remove('hidden');
+
+  setOpenExercises(true);
+  if (searchBox) searchBox.classList.add('filters__search--visible');
+  loadExercisesList({ page: 1, filter: nameValue, type: activeFilterType });
 }
 
-// First load
 getCategories(activeFilter, activePage, PAGE_LIMIT);

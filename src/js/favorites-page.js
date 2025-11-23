@@ -66,16 +66,16 @@ function renderPaginatedFavorites(page = 1) {
     contentWrapper.appendChild(listEl);
   }
 
-  let paginationContainer = contentWrapper.querySelector('.js-favorites-pagination');
+  let paginationContainer = contentWrapper.querySelector(
+    '.js-favorites-pagination'
+  );
   if (!paginationContainer) {
     paginationContainer = document.createElement('div');
-    paginationContainer.className = 'favorites-pagination js-favorites-pagination';
+    paginationContainer.className =
+      'favorites-pagination js-favorites-pagination';
     contentWrapper.appendChild(paginationContainer);
   }
 
-  // ----------------------------------------
-  // 🔥 DESKTOP PAGINATION (12 per page)
-  // ----------------------------------------
   if (isDesktop()) {
     const desktopLimit = 12;
     const totalPages = Math.ceil(allFavoritesData.length / desktopLimit);
@@ -98,18 +98,18 @@ function renderPaginatedFavorites(page = 1) {
           page: 'exercises__page',
           active: 'active',
           prev: 'exercises__page-prev',
-          next: 'exercises__page-next'
+          next: 'exercises__page-next',
         },
         icons: {
           prev: '<',
-          next: '>'
+          next: '>',
         },
         scrollToTop: true,
         scrollTarget: '.favorites-wrapper',
         onPageChange(newPage) {
           currentPage = newPage;
           renderPaginatedFavorites(newPage);
-        }
+        },
       });
     } else {
       paginationContainer.innerHTML = '';
@@ -118,9 +118,6 @@ function renderPaginatedFavorites(page = 1) {
     return;
   }
 
-  // ----------------------------------------
-  // 📱 MOBILE/TABLET (8/10 per page)
-  // ----------------------------------------
   const itemsPerPage = getItemsPerPage();
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -141,18 +138,18 @@ function renderPaginatedFavorites(page = 1) {
         page: 'exercises__page',
         active: 'active',
         prev: 'exercises__page-prev',
-        next: 'exercises__page-next'
+        next: 'exercises__page-next',
       },
       icons: {
         prev: '<',
-        next: '>'
+        next: '>',
       },
       scrollToTop: true,
       scrollTarget: '.favorites-wrapper',
       onPageChange(newPage) {
         currentPage = newPage;
         renderPaginatedFavorites(newPage);
-      }
+      },
     });
   } else {
     paginationContainer.innerHTML = '';

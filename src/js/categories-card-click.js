@@ -1,54 +1,38 @@
-import { activateFiltersTab } from './filters';
 import { loadExercisesList } from './exercises-list';
 import { resetExercisesSearch } from './exercises-search';
-
+import { setOpenExercises } from './state.js';
 
 export function handleCategoryCardClick(item) {
   return function (e) {
     e.preventDefault();
 
-    // 1. Визначаємо тип фільтру
+    const categoriesSection = document.getElementById('cards-box');
+    categoriesSection.classList.add('hidden');
+
+    const exercisesSection = document.getElementById('exercises');
+    exercisesSection.classList.remove('hidden');
+
+    setOpenExercises(true);
+    resetExercisesSearch();
+
     const TYPE_MAP = {
       Muscles: 'muscles',
       'Body parts': 'body-parts',
       Equipment: 'equipment',
     };
+    const type = TYPE_MAP[item.filter] || 'body-parts';
 
-    const type = TYPE_MAP[item.filter] || TYPE_MAP['Body parts'];
+    loadExercisesList({
+      page: 1,
+      type,
+      filter: item.name.toLowerCase(),
+      keyword: '',
+    });
 
-    // 2. Ховаємо категорії
-    const categoriesSection = document.getElementById('cards-box');
-    categoriesSection.classList.add('hidden');
-
-    // 3. Показуємо exercises
-    const exercisesSection = document.getElementById('exercises');
-    exercisesSection.classList.remove('hidden');
-
-    // 4. Активуємо таб Body parts + чорна риска
-    activateFiltersTab('bodypart', item.name);
-
-    resetExercisesSearch();
-
-      loadExercisesList({
-        page: 1,
-        filter: item.name.toLowerCase(),
-        type,
-        keyword: '', // <-- критично
-      });
-
-    // 5. Показуємо пошук (активує сама activateFiltersTab)
-
-    // 6. Завантажуємо exercises за категорією
-    // loadExercisesList ({
-    //   page: 1,
-    //   filter: item.name.toLowerCase(),
-    //   type,
-    // });
-
-    // 7. Оновлюємо URL
     const url = new URL(window.location.href);
     url.searchParams.set('type', type);
     url.searchParams.set('filter', item.name.toLowerCase());
+    url.searchParams.delete('keyword'); // очистити keyword
     window.history.pushState({}, '', url);
   };
 }
