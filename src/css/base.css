@@ -60,11 +60,3 @@ section {
 .iziToast-capsule {
   font-family: var(--font-main, 'Roboto', sans-serif) !important;
 }
-
-#equipment-box {
-  margin: 0 auto;
-}
-
-#equipment-box h3 {
-  width: 100%;
-}
