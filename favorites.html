@@ -1,41 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/your-energy/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Your energy</title>
-    <meta
-      name="description"
-      content="A free database of sports exercises, an overview of equipment and a designer of training programs. Exercise correctly with Your energy."
-    />
-    <meta
-      name="keywords"
-      content="sport, fitness, exercises, training program, gym, weight loss"
-    />
-    <link rel="canonical" href="https://studentvlad5.github.io/your-energy/" />
 
-    <meta
-      property="og:title"
-      content="Your energy: Your guide in the world of sports"
-    />
-    <meta
-      property="og:description"
-      content="Create your training program for free."
-    />
-    <meta
-      property="og:image"
-      content="https://studentvlad5.github.io/your-energy/hero.webp"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/your-energy/favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your energy</title>
+  <meta name="description"
+    content="A free database of sports exercises, an overview of equipment and a designer of training programs. Exercise correctly with Your energy." />
+  <meta name="keywords" content="sport, fitness, exercises, training program, gym, weight loss" />
+  <link rel="canonical" href="https://studentvlad5.github.io/your-energy/" />
 
-    <meta property="og:type" content="website" />
-    <script type="module" crossorigin src="/your-energy/assets/vendor-3BNOZKAJ.js"></script>
-    <script type="module" crossorigin src="/your-energy/assets/main-DIxMK9qW.js"></script>
-    <link rel="stylesheet" crossorigin href="/your-energy/assets/main-Cb-A609x.css">
-    <link rel="stylesheet" crossorigin href="/your-energy/assets/vendor-D_nxXpU-.css">
-  </head>
-  <body class="fixedClass">
-    <header class="header">
+  <meta property="og:title" content="Your energy: Your guide in the world of sports" />
+  <meta property="og:description" content="Create your training program for free." />
+  <meta property="og:image" content="https://studentvlad5.github.io/your-energy/hero.webp" />
+
+  <meta property="og:type" content="website" />
+  <script type="module" crossorigin src="/your-energy/assets/vendor-3BNOZKAJ.js"></script>
+  <script type="module" crossorigin src="/your-energy/assets/main-DPvoQMvw.js"></script>
+  <link rel="stylesheet" crossorigin href="/your-energy/assets/main-DDZYWE64.css">
+  <link rel="stylesheet" crossorigin href="/your-energy/assets/vendor-D_nxXpU-.css">
+</head>
+
+<body class="fixedClass">
+  <header class="header">
   <div class="container header__container">
     <nav class="nav">
       <a class="nav__logo-link" href="./index.html" aria-label="Your Energy home">
@@ -88,9 +76,9 @@
   document.querySelector(`[data-page="${currentPage}"]`)?.classList.add("nav__link--active");
 </script>
 
-    <main>
-      <div class="container favorites-wrapper">
-        <div class="quote-of-the-day">
+  <main>
+    <div class="container favorites-wrapper">
+      <div class="quote-of-the-day">
   <div class="quote-of-the-day__icon-wrap">
     <svg class="quote-of-the-day__run-icon" width="20" height="20">
       <use href="/your-energy/assets/icons-CzYEQ2n2.svg#icon-run"></use>
@@ -112,11 +100,12 @@
   </div>
 </div>
 
-        <ul class="favorites-list"></ul>
-      </div>
-    </main>
 
-    <svg
+      <section class="favorites-list"></section>
+    </div>
+  </main>
+
+  <svg
   aria-hidden="true"
   style="position: absolute; width: 0; height: 0; overflow: hidden"
   xmlns="http://www.w3.org/2000/svg"
@@ -161,21 +150,21 @@
       </a>
       <ul class="socials">
         <li class="socials__item">
-          <a href="#" class="socials__link" aria-label="Facebook">
+          <a href="https://www.facebook.com/goITclub/" class="socials__link" aria-label="Facebook">
             <svg class="socials__icon" width="24" height="24">
               <use href="#icon-Frame-52"></use>
             </svg>
           </a>
         </li>
         <li class="socials__item">
-          <a href="#" class="socials__link" aria-label="Instagram">
+          <a href="https://www.instagram.com/goitclub/" class="socials__link" aria-label="Instagram">
             <svg class="socials__icon" width="24" height="24">
               <use href="#icon-instagram"></use>
             </svg>
           </a>
         </li>
         <li class="socials__item">
-          <a href="#" class="socials__link" aria-label="YouTube">
+          <a href="https://www.youtube.com/c/GoIT" class="socials__link" aria-label="YouTube">
             <svg class="socials__icon" width="24" height="24">
               <use href="#icon-youtube"></use>
             </svg>
@@ -206,22 +195,19 @@
       </form>
     </div>
   </div>
-
   <div class="footer__bottom">
     <p class="footer__copy">Your Energy. All rights reserved.</p>
-
     <p class="footer__policy">
       <a href="#" class="footer__link">Privacy Policy</a>
       <span class="footer__divider">/</span>
       <a href="#" class="footer__link">Terms of Service</a>
     </p>
-
     <p class="footer__year">©2023</p>
   </div>
 </footer>
 
 
-    <div id="modal-template" class="modal-template hidden">
+  <div id="modal-template" class="modal-template hidden">
   <div class="modal-template__backdrop" data-modal-close></div>
   <div class="modal-template__content">
     <button
@@ -240,68 +226,7 @@
   </div>
 </div>
 
-    <template id="exercise-modal-template">
-  <div class="exercise-modal">
-    <div class="exercise-modal__loader">
-      <div class="sport-loader"></div>
-    </div>
-    <img class="exercise-modal__gif" src="" alt="Exercise GIF" />
-
-    <div>
-      <div class="exercise-modal__header">
-        <h2 class="exercise-modal__title"></h2>
-        <div class="exercise-modal__rating">
-          <span class="exercise-modal__rating-value"></span>
-          <div class="exercise-modal__stars"></div>
-        </div>
-      </div>
-
-      <div class="exercise-modal__info">
-        <p><b>Target</b> <span class="exercise-modal__target"></span></p>
-        <p><b>Body part</b> <span class="exercise-modal__bodypart"></span></p>
-        <p><b>Equipment</b> <span class="exercise-modal__equipment"></span></p>
-        <p><b>Popular</b> <span class="exercise-modal__popular"></span></p>
-        <p>
-          <b>Burned calories</b> <span class="exercise-modal__calories"></span>
-        </p>
-      </div>
-
-      <p class="exercise-modal__description"></p>
-
-      <div class="exercise-modal__actions">
-        <button
-          class="exercise-modal__btn exercise-modal__btn--favorites favorites-btn"
-        >
-          Add to favorites
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            class="exercise-modal__btn-icon"
-          >
-            <path
-              d="M17.3666 3.84172C16.941 3.41589 16.4356 3.0781 15.8794 2.84763C15.3232 2.61716 14.727 2.49854 14.1249 2.49854C13.5229 2.49854 12.9267 2.61716 12.3705 2.84763C11.8143 3.0781 11.3089 3.41589 10.8833 3.84172L9.99994 4.72506L9.1166 3.84172C8.25686 2.98198 7.0908 2.49898 5.87494 2.49898C4.65907 2.49898 3.49301 2.98198 2.63327 3.84172C1.77353 4.70147 1.29053 5.86753 1.29053 7.08339C1.29053 8.29925 1.77353 9.46531 2.63327 10.3251L3.5166 11.2084L9.99994 17.6917L16.4833 11.2084L17.3666 10.3251C17.7924 9.89943 18.1302 9.39407 18.3607 8.83785C18.5912 8.28164 18.7098 7.68546 18.7098 7.08339C18.7098 6.48132 18.5912 5.88514 18.3607 5.32893C18.1302 4.77271 17.7924 4.26735 17.3666 3.84172Z"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
-        <button
-          class="exercise-modal__btn exercise-modal__btn--rating"
-          data-modal="rating"
-        >
-          Give a rating
-        </button>
-      </div>
-    </div>
-  </div>
-</template>
-
-    <div class="rating-modal">
+  <div class="rating-modal">
   <form class="rating-modal__form" id="rating-form">
     <div class="rating-modal__rating">
       <p class="rating-modal__label">Rating</p>
@@ -436,7 +361,7 @@
   </form>
 </div>
 
-    <div id="modal-confirm" class="modal-confirm hidden">
+  <div id="modal-confirm" class="modal-confirm hidden">
   <div class="modal-confirm__backdrop" data-confirm-close></div>
   <div class="modal-confirm__content">
     <p class="modal-confirm__message" data-confirm-message>
@@ -461,7 +386,7 @@
   </div>
 </div>
 
-    <div class="mobile-menu" data-menu>
+  <div class="mobile-menu" data-menu>
   <div class="mobile-menu__container">
     <button
       class="mobile-menu__close"
@@ -533,13 +458,13 @@
   </div>
 </div>
 
-    <div id="bg-loader">
+  <div id="bg-loader">
   <div id="loader-overlay" class="loader-overlay">
     <div class="sport-loader"></div>
   </div>
 </div>
 
-    <a href="#" class="scroll-up-btn" aria-label="Go to top">
+  <a href="#" class="scroll-up-btn" aria-label="Go to top">
   <!-- <svg class="icon-desktop" aria-hidden="true">
     <use href="src/img/arrow-top-right.svg"></use>
   </svg>
@@ -551,5 +476,6 @@
 
 
 
-  </body>
+</body>
+
 </html>
