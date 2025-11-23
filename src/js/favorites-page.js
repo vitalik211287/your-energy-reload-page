@@ -66,10 +66,13 @@ function renderPaginatedFavorites(page = 1) {
     contentWrapper.appendChild(listEl);
   }
 
-  let paginationContainer = contentWrapper.querySelector('.js-favorites-pagination');
+  let paginationContainer = contentWrapper.querySelector(
+    '.js-favorites-pagination'
+  );
   if (!paginationContainer) {
     paginationContainer = document.createElement('div');
-    paginationContainer.className = 'favorites-pagination js-favorites-pagination';
+    paginationContainer.className =
+      'favorites-pagination js-favorites-pagination';
     contentWrapper.appendChild(paginationContainer);
   }
 
@@ -94,22 +97,23 @@ function renderPaginatedFavorites(page = 1) {
         totalPages: totalPages,
         mode: 'neighbors',
         showPrevNext: totalPages > 2,
+        showArrows: totalPages > 3, // ✅ додано: подвійні << >>
         classes: {
           page: 'exercises__page',
           active: 'active',
           prev: 'exercises__page-prev',
-          next: 'exercises__page-next'
+          next: 'exercises__page-next',
         },
         icons: {
           prev: '<',
-          next: '>'
+          next: '>',
         },
         scrollToTop: true,
         scrollTarget: '.favorites-wrapper',
         onPageChange(newPage) {
           currentPage = newPage;
           renderPaginatedFavorites(newPage);
-        }
+        },
       });
     } else {
       paginationContainer.innerHTML = '';
@@ -137,22 +141,23 @@ function renderPaginatedFavorites(page = 1) {
       totalPages: totalPages,
       mode: 'neighbors',
       showPrevNext: totalPages > 2,
+      showArrows: totalPages > 3, // 
       classes: {
         page: 'exercises__page',
         active: 'active',
         prev: 'exercises__page-prev',
-        next: 'exercises__page-next'
+        next: 'exercises__page-next',
       },
       icons: {
         prev: '<',
-        next: '>'
+        next: '>',
       },
       scrollToTop: true,
       scrollTarget: '.favorites-wrapper',
       onPageChange(newPage) {
         currentPage = newPage;
         renderPaginatedFavorites(newPage);
-      }
+      },
     });
   } else {
     paginationContainer.innerHTML = '';
