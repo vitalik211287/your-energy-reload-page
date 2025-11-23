@@ -203,11 +203,13 @@
     overflow-y: scroll;
     overflow-x: hidden;
     margin-top: 80px;
+    min-width: 826px;
+    scrollbar-gutter: stable;
   }
 
   .favorites-list .exercises__item {
     height: 141px;
-    width: 405px;
+    width: calc((100% - 16px) / 2);
   }
 
   .favorites-list .exercises__item .exercises__name-container {
