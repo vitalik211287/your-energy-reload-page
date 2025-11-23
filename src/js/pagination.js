@@ -4,8 +4,8 @@ export function renderPaginationUniversal({
   totalPages,
   onPageChange,
   mode = 'full',
-  showArrows = false, // подвійні «»
-  showPrevNext = false, // одинарні <>
+  showArrows = false, 
+  showPrevNext = false, 
   classes = {},
   icons = {},
   scrollToTop = true,
@@ -56,7 +56,7 @@ export function renderPaginationUniversal({
     }
   };
 
-  // Prev/Next зовні тільки не в neighbors
+
   if (mode !== 'neighbors') {
     if (showPrevNext && currentPage > 1) {
       const prevBtn = createBtn(prevIcon, currentPage - 1, prevClass);
@@ -83,12 +83,12 @@ export function renderPaginationUniversal({
       pages = [currentPage - 1, currentPage, currentPage + 1];
     }
 
-    // ⬅ ліві стрілки логіка
-    const disablePrev = currentPage === 1; // < disabled тільки на 1
-    const disableFirst = currentPage <= 2; // << disabled на 1 і 2
-    const isAtEnd = pages[2] === totalPages; // для правих стрілок
 
-    // << — disabled на 1 і 2
+    const disablePrev = currentPage === 1; 
+    const disableFirst = currentPage <= 2;
+    const isAtEnd = pages[2] === totalPages; 
+
+  
     if (showArrows && totalPages > 3) {
       const firstBtn = createBtn(
         firstIcon,
@@ -99,7 +99,6 @@ export function renderPaginationUniversal({
       container.appendChild(firstBtn);
     }
 
-    // < — disabled тільки на 1
     if (showPrevNext) {
       const prevBtn = createBtn(
         prevIcon,
@@ -110,7 +109,6 @@ export function renderPaginationUniversal({
       container.appendChild(prevBtn);
     }
 
-    // Pages
     pages.forEach(p => {
       const btn = createBtn(
         p,
@@ -120,7 +118,6 @@ export function renderPaginationUniversal({
       container.appendChild(btn);
     });
 
-    // > — disabled тільки на останньому вікні
     if (showPrevNext) {
       const nextBtn = createBtn(
         nextIcon,
@@ -131,7 +128,6 @@ export function renderPaginationUniversal({
       container.appendChild(nextBtn);
     }
 
-    // >> — disabled тільки на останньому вікні
     if (showArrows && totalPages > 3) {
       const lastBtn = createBtn(
         lastIcon,
@@ -143,7 +139,6 @@ export function renderPaginationUniversal({
     }
   }
 
-  // Next зовні тільки не в neighbors
   if (mode !== 'neighbors') {
     if (showPrevNext && currentPage < totalPages) {
       const nextBtn = createBtn(nextIcon, currentPage + 1, nextClass);
@@ -151,7 +146,6 @@ export function renderPaginationUniversal({
     }
   }
 
-  // Events
   container.querySelectorAll('button').forEach(btn => {
     btn.addEventListener('click', () => {
       if (btn.disabled) return;
