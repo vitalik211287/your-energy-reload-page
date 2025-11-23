@@ -29,10 +29,10 @@ export function handleCategoryCardClick(item) {
       keyword: '',
     });
 
-    const url = new URL(window.location.href);
-    url.searchParams.set('type', type);
-    url.searchParams.set('filter', item.name.toLowerCase());
-    url.searchParams.delete('keyword'); // очистити keyword
-    window.history.pushState({}, '', url);
+    // const url = new URL(window.location.href);
+    // url.searchParams.set('type', type);
+    // url.searchParams.set('filter', item.name.toLowerCase());
+    // url.searchParams.delete('keyword'); // очистити keyword
+    // window.history.pushState({}, '', url);
   };
 }
