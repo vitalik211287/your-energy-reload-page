@@ -81,7 +81,8 @@
 
 @media (min-width: 768px) {
   .sidebar__daily-norm {
-    width: 320px;
+    width: 100%;
+    max-width: 400px;
     min-height: 249px;
     padding: 40px;
   }
