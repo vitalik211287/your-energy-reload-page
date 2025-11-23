@@ -45,7 +45,6 @@ export async function loadExercisesList({
   const activeType = currentQuery.type;
   const activeFilter = currentQuery.filter;
   const activeKeyword = currentQuery.keyword || '';
-
   const params = buildExercisesParams({
     page,
     limit,

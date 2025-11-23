@@ -1,4 +1,4 @@
-import { VALIDATION, ERROR_MESSAGES } from './constants.js';
+import { VALIDATION } from './constants.js';
 import { showSuccess, showError, showInfo } from './iziToast-helper.js';
 const form = document.querySelector('.footer__form');
 const emailInput = form.querySelector('.footer__input');

@@ -4,6 +4,9 @@ import { handleCategoryCardClick } from './categories-card-click';
 import { cancelLoader, startLoader } from './loader';
 import { YourEnergyAPI } from './api';
 import { renderPaginationUniversal } from './pagination';
+import { loadExercisesList } from './exercises-list.js';
+import { setOpenExercises } from './state.js';
+import { resetExercisesSearch } from './exercises-search'; // ✅ додано
 
 export const fetchApi = new YourEnergyAPI();
 
@@ -13,7 +16,7 @@ const PAGE_LIMIT = window.innerWidth < 768 ? 9 : 12;
 let activeFilter = 'Muscles';
 let activePage = 1;
 
-async function getCategories(
+export async function getCategories(
   filter = activeFilter,
   page = 1,
   limit = PAGE_LIMIT
@@ -92,9 +95,8 @@ function renderCards(items) {
       </div>
     `;
 
-    // card click
-    card.addEventListener('click', handleCategoryCardClick(item));
-
+    // handleCategoryCardClick;
+    card.addEventListener('click', () => handleCategoryCardClick(item));
     container.appendChild(card);
 
     const cardBody = card.querySelector('.card-body');
@@ -115,8 +117,8 @@ function renderPagination(currentPage, totalPages) {
     totalPages,
     mode: 'neighbors',
 
-    showPrevNext: totalPages > 2, 
-    showArrows: totalPages > 3, 
+    showPrevNext: totalPages > 2,
+    showArrows: totalPages > 3,
 
     classes: {
       page: 'pagination-page',
@@ -151,10 +153,37 @@ function clearPagination() {
   if (container) container.innerHTML = '';
 }
 
-// Callback on card click
 export function onCardBodyClick(nameValue) {
-  console.log('Clicked name:', nameValue);
+  const searchBox = document.querySelector('.filters__search');
+  const categoriesBox = document.getElementById('cards-box');
+  const exercisesBox = document.getElementById('exercises');
+
+  const tabsContainer = document.querySelector('[data-filters-tabs]');
+  const activeTab = tabsContainer.querySelector('.filters__tab--active');
+  const activeFilterType = activeTab ? activeTab.dataset.filter : null;
+
+  if (categoriesBox) categoriesBox.classList.add('hidden');
+  if (exercisesBox) exercisesBox.classList.remove('hidden');
+
+  setOpenExercises(true);
+  if (searchBox) searchBox.classList.add('filters__search--visible');
+
+  const filtersSubtitle = document.querySelector('.filters__subtitle');
+  if (filtersSubtitle) {
+    filtersSubtitle.textContent =
+      nameValue.charAt(0).toUpperCase() + nameValue.slice(1);
+  } else {
+    filtersSubtitle.textContent = '';
+  }
+
+  resetExercisesSearch();
+
+  loadExercisesList({
+    page: 1,
+    filter: nameValue,
+    type: activeFilterType,
+    keyword: '', // <-- критично
+  });
 }
 
-// Initial load
 getCategories(activeFilter, activePage, PAGE_LIMIT);
