@@ -1,2 +1,2 @@
-import{c as a,r as t,e as n,f as o,g as i,M as e,h as s,j as d}from"./assets/modal-rating-content-BuOkZOrQ.js";import"./assets/vendor-3BNOZKAJ.js";document.addEventListener("DOMContentLoaded",()=>{setTimeout(()=>a(),300),r()});function r(){t(e.RATING,i,o),t(e.EXERCISE,d,s),n()}
+import{c as a,e as t,f as n,g as o,h as i,M as e,j as s,k as d}from"./assets/modal-rating-content-CNx-ZwuU.js";import"./assets/vendor-3BNOZKAJ.js";document.addEventListener("DOMContentLoaded",()=>{setTimeout(()=>a(),300),M()});function M(){t(e.RATING,i,o),t(e.EXERCISE,d,s),n()}
 //# sourceMappingURL=favorites.js.map
