@@ -2,8 +2,11 @@
 .favorites-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 20px;
   padding-top: 80px;
+}
+.favorites-wrapper .main-container {
+  padding: 0;
+  margin-bottom: 40px;
 }
 
 .favorites-wrapper .sidebar__daily-norm-wrapper {
@@ -24,6 +27,9 @@
 
 .favorites-wrapper .sidebar__photo-card {
   order: 3;
+  width: 100%;
+  height: auto;
+  max-height: 119px;
 }
 
 .favorites-wrapper .sidebar__daily-norm-text {
