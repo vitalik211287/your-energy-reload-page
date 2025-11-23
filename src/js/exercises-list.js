@@ -252,10 +252,6 @@ export function renderExercisesPagination(currentPage, totalPages) {
       prev: 'exercises__page-prev',
       next: 'exercises__page-next',
     },
-    // icons: {
-    //   prev: '<',
-    //   next: '>',
-    // },
 
     scrollTarget: '.exercises',
     onPageChange: page => loadExercisesList({ page }),
