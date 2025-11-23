@@ -2,6 +2,7 @@ import { YourEnergyAPI } from './api';
 import { showError } from './iziToast-helper';
 import { injectSchema } from './seo-function';
 import { handleCategoryCardClick } from './categories-card-click';
+import { cancelLoader, startLoader } from './loader';
 export const fetchApi = new YourEnergyAPI();
 
 const PAGE_LIMIT = window.innerWidth < 768 ? 9 : 12;
@@ -10,30 +11,35 @@ const PAGE_LIMIT = window.innerWidth < 768 ? 9 : 12;
 let activeFilter = 'Muscles';
 let activePage = 1;
 
-async function getCategories(filter = activeFilter, page = 1, limit = PAGE_LIMIT) {
+async function getCategories(
+  filter = activeFilter,
+  page = 1,
+  limit = PAGE_LIMIT
+) {
   activeFilter = filter;
   activePage = page;
 
   try {
     const params = { filter, page, limit };
+    startLoader();
     const data = await fetchApi.getFilters(params);
 
     if (!data) {
-      showError("Failed to fetch categories: No response from server");
+      showError('Failed to fetch categories: No response from server');
       clearCards();
       clearPagination();
       return;
     }
 
     if (data.error || data.status === 'error') {
-      showError(data.message || "Failed to fetch categories");
+      showError(data.message || 'Failed to fetch categories');
       clearCards();
       clearPagination();
       return;
     }
 
     if (!data.results || data.results.length === 0) {
-      showError("Nothing found");
+      showError('Nothing found');
       clearCards();
       clearPagination();
       return;
@@ -50,6 +56,8 @@ async function getCategories(filter = activeFilter, page = 1, limit = PAGE_LIMIT
     showError(err?.message || 'Something went wrong');
     clearCards();
     clearPagination();
+  } finally {
+    cancelLoader();
   }
 }
 
@@ -57,19 +65,20 @@ async function getCategories(filter = activeFilter, page = 1, limit = PAGE_LIMIT
 function renderCards(items) {
   const container = document.getElementById('cards-container');
   if (!container) return;
-  container.innerHTML = "";
+  container.innerHTML = '';
 
   items.forEach(item => {
     const card = document.createElement('div');
     card.className = 'card';
 
     // Safe values
-    const safeImg = item.imgURL && item.imgURL.trim() !== "" 
-      ? item.imgURL 
-      : "/img/no-image.jpg";     // fallback image
-    
-    const safeName = item.name || "";
-    const safeFilter = item.filter || "";
+    const safeImg =
+      item.imgURL && item.imgURL.trim() !== ''
+        ? item.imgURL
+        : '/img/no-image.jpg'; // fallback image
+
+    const safeName = item.name || '';
+    const safeFilter = item.filter || '';
 
     card.innerHTML = `
       <img src="${safeImg}" alt="${safeName}" loading="lazy" />
@@ -82,8 +91,8 @@ function renderCards(items) {
     card.addEventListener('click', handleCategoryCardClick(item));
     container.appendChild(card);
 
-    const cardBody = card.querySelector(".card-body");
-    cardBody.addEventListener("click", () => {
+    const cardBody = card.querySelector('.card-body');
+    cardBody.addEventListener('click', () => {
       onCardBodyClick(safeName);
     });
   });
@@ -106,12 +115,19 @@ function renderPagination(currentPage, totalPages) {
     if (pageNum === currentPage) {
       btn.classList.add('active');
     }
+    const el = document.getElementById('cards-box');
 
     btn.addEventListener('click', () => {
       if (pageNum === activePage) return;
       activePage = pageNum;
       getCategories(activeFilter, pageNum, PAGE_LIMIT);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (el) {
+        const y = el.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: y - 200, behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     });
 
     container.appendChild(btn);
@@ -120,18 +136,18 @@ function renderPagination(currentPage, totalPages) {
 
 // Clear Helpers
 function clearCards() {
-  const container = document.getElementById("cards-container");
-  if (container) container.innerHTML = "";
+  const container = document.getElementById('cards-container');
+  if (container) container.innerHTML = '';
 }
 
 function clearPagination() {
-  const container = document.getElementById("pagination");
-  if (container) container.innerHTML = "";
+  const container = document.getElementById('pagination');
+  if (container) container.innerHTML = '';
 }
 
 // Callback on card click
 export function onCardBodyClick(nameValue) {
-  console.log("Clicked name:", nameValue);
+  console.log('Clicked name:', nameValue);
   // here need to add logic how to join categories and exercises
 }
 

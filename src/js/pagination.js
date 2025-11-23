@@ -8,7 +8,7 @@ export function renderPaginationUniversal({
   classes = {},
   icons = {},
   scrollToTop = true,
-  scrollTarget = null, // <-- новий параметр
+  scrollTarget = null,
 }) {
   if (!container) return;
   container.innerHTML = '';
@@ -73,7 +73,8 @@ export function renderPaginationUniversal({
               : scrollTarget;
 
           if (el) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const y = el.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({ top: y - 200, behavior: 'smooth' });
           }
         } else {
           window.scrollTo({ top: 0, behavior: 'smooth' });
