@@ -1,8 +1,9 @@
-import { YourEnergyAPI } from './api';
 import { showError } from './iziToast-helper';
 import { injectSchema } from './seo-function';
 import { handleCategoryCardClick } from './categories-card-click';
 import { cancelLoader, startLoader } from './loader';
+import { YourEnergyAPI } from './api';
+import { renderPaginationUniversal } from './pagination';
 export const fetchApi = new YourEnergyAPI();
 
 const PAGE_LIMIT = window.innerWidth < 768 ? 9 : 12;
@@ -115,36 +116,19 @@ function renderPagination(currentPage, totalPages) {
       page: 'pagination-page',
       active: 'active',
       prev: 'pagination-page-prev',
-      next: 'pagination-page-next'
+      next: 'pagination-page-next',
     },
     icons: {
       prev: '<',
-      next: '>'
+      next: '>',
     },
     scrollToTop: true,
+    scrollTarget: '.main-container',
     onPageChange(page) {
       activePage = page;
-      getCategories(activeFilter, page, PAGE_LIMIT);
-    }
-    const el = document.getElementById('cards-box');
-
-    btn.addEventListener('click', () => {
-      if (pageNum === activePage) return;
-
-      activePage = pageNum;
-      getCategories(activeFilter, pageNum, PAGE_LIMIT);
-
-
-      if (el) {
-        const y = el.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({ top: y - 200, behavior: 'smooth' });
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
-
-    container.appendChild(btn);
-  }
+      return getCategories(activeFilter, page, PAGE_LIMIT);
+    },
+  });
 }
 
 // Clear Helpers
