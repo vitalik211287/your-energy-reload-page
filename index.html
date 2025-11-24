@@ -1,31 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.png" />
+    <link rel="icon" type="image/svg+xml" href="/your-energy/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your energy</title>
+    <meta
+      name="description"
+      content="A free database of sports exercises, an overview of equipment and a designer of training programs. Exercise correctly with Your energy."
+    />
+    <meta
+      name="keywords"
+      content="sport, fitness, exercises, training program, gym, weight loss"
+    />
+    <link rel="canonical" href="https://studentvlad5.github.io/your-energy/" />
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="./favicon.png" />
-  <link rel="icon" type="image/svg+xml" href="/your-energy/favicon.png" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Your energy</title>
-  <meta name="description"
-    content="A free database of sports exercises, an overview of equipment and a designer of training programs. Exercise correctly with Your energy." />
-  <meta name="keywords" content="sport, fitness, exercises, training program, gym, weight loss" />
-  <link rel="canonical" href="https://studentvlad5.github.io/your-energy/" />
+    <meta
+      property="og:title"
+      content="Your energy: Your guide in the world of sports"
+    />
+    <meta
+      property="og:description"
+      content="Create your training program for free."
+    />
+    <meta
+      property="og:image"
+      content="https://studentvlad5.github.io/your-energy/hero.webp"
+    />
+    <meta property="og:type" content="website" />
 
-  <meta property="og:title" content="Your energy: Your guide in the world of sports" />
-  <meta property="og:description" content="Create your training program for free." />
-  <meta property="og:image" content="https://studentvlad5.github.io/your-energy/hero.webp" />
-  <meta property="og:type" content="website" />
+    <script type="module" crossorigin src="/your-energy/index.js"></script>
+    <link rel="modulepreload" crossorigin href="/your-energy/assets/vendor-3BNOZKAJ.js">
+    <link rel="modulepreload" crossorigin href="/your-energy/assets/modal-rating-content-CN-qGlTv.js">
+    <link rel="stylesheet" crossorigin href="/your-energy/assets/vendor-D_nxXpU-.css">
+    <link rel="stylesheet" crossorigin href="/your-energy/assets/modal-rating-content-Df2xcSf_.css">
+  </head>
 
-  <script type="module" crossorigin src="/your-energy/index.js"></script>
-  <link rel="modulepreload" crossorigin href="/your-energy/assets/vendor-3BNOZKAJ.js">
-  <link rel="modulepreload" crossorigin href="/your-energy/assets/modal-rating-content-CN-qGlTv.js">
-  <link rel="stylesheet" crossorigin href="/your-energy/assets/vendor-D_nxXpU-.css">
-  <link rel="stylesheet" crossorigin href="/your-energy/assets/modal-rating-content-Df2xcSf_.css">
-</head>
-
-<body class="fixedClass">
-  <header class="header">
+  <body class="fixedClass">
+    <header class="header">
   <div class="container header__container">
     <nav class="nav">
       <a class="nav__logo-link" href="./index.html" aria-label="Your Energy home">
@@ -78,23 +91,9 @@
   document.querySelector(`[data-page="${currentPage}"]`)?.classList.add("nav__link--active");
 </script>
 
-    <meta
-      property="og:title"
-      content="Your energy: Your guide in the world of sports"
-    />
-    <meta
-      property="og:description"
-      content="Create your training program for free."
-    />
-    <meta
-      property="og:image"
-      content="https://studentvlad5.github.io/your-energy/hero.webp"
-    />
-    <meta property="og:type" content="website" />
-  </head>
 
-  <main>
-    <section class="section">
+    <main>
+      <section class="section">
   <div class="container">
     <div class="hero-wrapper">
       <div class="hero-title-and-text">
@@ -158,7 +157,7 @@
   </div>
 </section>
 
-    <section class="filters">
+      <section class="filters">
   <h2 class="hidden">Filters</h2>
   <div class="container">
     <div class="filters__header">
@@ -236,7 +235,7 @@
 </section>
 
 
-    <div class="main-container container">
+      <div class="main-container container">
   <div class="sidebar">
     <div class="quote-of-the-day">
   <div class="quote-of-the-day__icon-wrap">
@@ -331,9 +330,9 @@
 
 </div>
 
-  </main>
+    </main>
 
-  <svg
+    <svg
   aria-hidden="true"
   style="position: absolute; width: 0; height: 0; overflow: hidden"
   xmlns="http://www.w3.org/2000/svg"
@@ -435,7 +434,7 @@
 </footer>
 
 
-  <div id="modal-template" class="modal-template hidden">
+    <div id="modal-template" class="modal-template hidden">
   <div class="modal-template__backdrop" data-modal-close></div>
   <div class="modal-template__content">
     <button
@@ -454,7 +453,7 @@
   </div>
 </div>
 
-  <template id="exercise-modal-template">
+    <template id="exercise-modal-template">
   <div class="exercise-modal">
     <div class="exercise-modal__loader">
       <div class="sport-loader"></div>
@@ -531,7 +530,7 @@
   </div>
 </template>
 
-  <div class="rating-modal">
+    <div class="rating-modal">
   <form class="rating-modal__form" id="rating-form">
     <div class="rating-modal__rating">
       <p class="rating-modal__label">Rating</p>
@@ -666,7 +665,7 @@
   </form>
 </div>
 
-  <div id="modal-confirm" class="modal-confirm hidden">
+    <div id="modal-confirm" class="modal-confirm hidden">
   <div class="modal-confirm__backdrop" data-confirm-close></div>
   <div class="modal-confirm__content">
     <p class="modal-confirm__message" data-confirm-message>
@@ -692,7 +691,7 @@
 </div>
 
 
-  <div class="mobile-menu" data-menu>
+    <div class="mobile-menu" data-menu>
   <div class="mobile-menu__container">
     <button
       class="mobile-menu__close"
@@ -764,13 +763,13 @@
   </div>
 </div>
 
-  <div id="bg-loader">
+    <div id="bg-loader">
   <div id="loader-overlay" class="loader-overlay">
     <div class="sport-loader"></div>
   </div>
 </div>
 
-  <a href="#" class="scroll-up-btn" aria-label="Go to top">
+    <a href="#" class="scroll-up-btn" aria-label="Go to top">
   <!-- <svg class="icon-desktop" aria-hidden="true">
     <use href="src/img/arrow-top-right.svg"></use>
   </svg>
@@ -781,6 +780,5 @@
 </a>
 
 
-</body>
-
+  </body>
 </html>
