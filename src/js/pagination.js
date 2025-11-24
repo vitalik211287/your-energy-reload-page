@@ -20,9 +20,16 @@ export function renderPaginationUniversal({
     arrow: arrowClass = '',
     prev: prevClass = '',
     next: nextClass = '',
+    first: firstClass = '',
+    last: lastClass = '',
   } = classes;
 
-  const { prev: prevIcon = 'Prev', next: nextIcon = 'Next' } = icons;
+  const {
+    prev: prevIcon = '<',
+    next: nextIcon = '>',
+    first: firstIcon = '<<',
+    last: lastIcon = '>>',
+  } = icons;
 
   const createBtn = (label, page, className = '') => {
     const btn = document.createElement('button');
@@ -49,9 +56,11 @@ export function renderPaginationUniversal({
     }
   };
 
-  if (showPrevNext && currentPage > 1) {
-    const prevBtn = createBtn(prevIcon, currentPage - 1, prevClass);
-    container.appendChild(prevBtn);
+  if (mode !== 'neighbors') {
+    if (showPrevNext && currentPage > 1) {
+      const prevBtn = createBtn(prevIcon, currentPage - 1, prevClass);
+      container.appendChild(prevBtn);
+    }
   }
 
   if (mode === 'full') {
@@ -73,6 +82,30 @@ export function renderPaginationUniversal({
       pages = [currentPage - 1, currentPage, currentPage + 1];
     }
 
+    const disablePrev = currentPage === 1;
+    const disableFirst = currentPage <= 2;
+    const isAtEnd = currentPage === totalPages;
+
+    if (showArrows && totalPages > 3) {
+      const firstBtn = createBtn(
+        firstIcon,
+        1,
+        `${arrowClass} ${prevClass} ${firstClass}`.trim()
+      );
+      if (disableFirst) firstBtn.disabled = true;
+      container.appendChild(firstBtn);
+    }
+
+    if (showPrevNext) {
+      const prevBtn = createBtn(
+        prevIcon,
+        Math.max(1, currentPage - 1),
+        `${prevClass}`.trim()
+      );
+      if (disablePrev) prevBtn.disabled = true;
+      container.appendChild(prevBtn);
+    }
+
     pages.forEach(p => {
       const btn = createBtn(
         p,
@@ -81,15 +114,39 @@ export function renderPaginationUniversal({
       );
       container.appendChild(btn);
     });
+
+    if (showPrevNext) {
+      const nextBtn = createBtn(
+        nextIcon,
+        Math.min(totalPages, currentPage + 1),
+        `${nextClass}`.trim()
+      );
+      if (isAtEnd) nextBtn.disabled = true;
+      container.appendChild(nextBtn);
+    }
+
+    if (showArrows && totalPages > 3) {
+      const lastBtn = createBtn(
+        lastIcon,
+        totalPages,
+        `${arrowClass} ${nextClass} ${lastClass}`.trim()
+      );
+      if (isAtEnd) lastBtn.disabled = true;
+      container.appendChild(lastBtn);
+    }
   }
 
-  if (showPrevNext && currentPage < totalPages) {
-    const nextBtn = createBtn(nextIcon, currentPage + 1, nextClass);
-    container.appendChild(nextBtn);
+  if (mode !== 'neighbors') {
+    if (showPrevNext && currentPage < totalPages) {
+      const nextBtn = createBtn(nextIcon, currentPage + 1, nextClass);
+      container.appendChild(nextBtn);
+    }
   }
 
   container.querySelectorAll('button').forEach(btn => {
     btn.addEventListener('click', () => {
+      if (btn.disabled) return;
+
       const page = Number(btn.dataset.page);
       if (Number.isNaN(page) || page === currentPage) return;
 

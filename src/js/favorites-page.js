@@ -100,6 +100,7 @@ function renderPaginatedFavorites(page = 1) {
         totalPages: totalPages,
         mode: 'neighbors',
         showPrevNext: totalPages > 2,
+        showArrows: totalPages > 3, // ✅ додано: подвійні << >>
         classes: {
           page: 'exercises__page',
           active: 'active',
@@ -140,6 +141,7 @@ function renderPaginatedFavorites(page = 1) {
       totalPages: totalPages,
       mode: 'neighbors',
       showPrevNext: totalPages > 2,
+      showArrows: totalPages > 3, // 
       classes: {
         page: 'exercises__page',
         active: 'active',
