@@ -6,7 +6,8 @@ import { YourEnergyAPI } from './api';
 import { renderPaginationUniversal } from './pagination';
 import { loadExercisesList } from './exercises-list.js';
 import { setOpenExercises } from './state.js';
-import { resetExercisesSearch } from './exercises-search'; // ✅ додано
+import { resetExercisesSearch } from './exercises-search';
+import { scrollToFilter } from './scrollToFilter';
 
 export const fetchApi = new YourEnergyAPI();
 
@@ -135,9 +136,7 @@ function renderPagination(currentPage, totalPages) {
     scrollToTop: false,
     onPageChange(page) {
       activePage = page;
-      document
-        .querySelector('.filters__controls')
-        ?.scrollIntoView({ behavior: 'smooth' });
+      scrollToFilter();
       return getCategories(activeFilter, page, PAGE_LIMIT);
     },
   });
@@ -178,7 +177,7 @@ export function onCardBodyClick(nameValue) {
   }
 
   resetExercisesSearch();
-
+  scrollToFilter();
   loadExercisesList({
     page: 1,
     filter: nameValue,

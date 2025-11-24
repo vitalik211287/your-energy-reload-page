@@ -9,6 +9,7 @@ import {
   initExerciseModal,
 } from './modal-exercise-content.js';
 import { injectSchemaExercises } from './seo-function.js';
+import { scrollToFilter } from './scrollToFilter';
 
 const api = new YourEnergyAPI();
 
@@ -251,10 +252,9 @@ export function renderExercisesPagination(currentPage, totalPages) {
       prev: 'exercises__page-prev',
       next: 'exercises__page-next',
     },
+    scrollToTop: false,
     onPageChange: page => {
-      document
-        .querySelector('.filters__controls')
-        ?.scrollIntoView({ behavior: 'smooth' });
+      scrollToFilter();
       loadExercisesList({ page });
     },
   });
@@ -269,7 +269,6 @@ function handleExerciseItemClick(listEl) {
     if (button.hasAttribute('data-click-handler-attached')) {
       return;
     }
-
     button.addEventListener('click', handleExcersiseModalOpen);
     button.setAttribute('data-click-handler-attached', 'true');
   });
