@@ -203,9 +203,6 @@ input:focus {
 .footer__link:focus {
   text-decoration: underline;
 }
-.footer_container {
-  padding: 42px 20px 0;
-}
 
 @media (min-width: 768px) {
   .footer__top {
@@ -277,6 +274,9 @@ input:focus {
 }
 
 @media (min-width: 1440px) {
+  .footer {
+    padding-top: 69px;
+  }
   .container.footer__top {
     padding-top: 64px;
     width: 1440px;
