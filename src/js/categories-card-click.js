@@ -12,6 +12,9 @@ export function handleCategoryCardClick(item) {
     const exercisesSection = document.getElementById('exercises');
     exercisesSection.classList.remove('hidden');
 
+    const equipmentBox = document.getElementById('equipment-box');
+    equipmentBox.classList.add('hidden');
+
     setOpenExercises(true);
     resetExercisesSearch();
 
