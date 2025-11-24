@@ -178,6 +178,7 @@ export function onCardBodyClick(nameValue) {
   const searchBox = document.querySelector('.filters__search');
   const categoriesBox = document.getElementById('cards-box');
   const exercisesBox = document.getElementById('exercises');
+  const equipmentBox = document.getElementById('equipment-box');
 
   const tabsContainer = document.querySelector('[data-filters-tabs]');
   const activeTab = tabsContainer.querySelector('.filters__tab--active');
@@ -185,6 +186,7 @@ export function onCardBodyClick(nameValue) {
 
   if (categoriesBox) categoriesBox.classList.add('hidden');
   if (exercisesBox) exercisesBox.classList.remove('hidden');
+  if (equipmentBox) equipmentBox.classList.add('hidden');
 
   setOpenExercises(true);
   if (searchBox) searchBox.classList.add('filters__search--visible');

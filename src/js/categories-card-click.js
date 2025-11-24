@@ -6,14 +6,14 @@ export function handleCategoryCardClick(item) {
   return function (e) {
     e.preventDefault();
 
-    const categoriesSection = document.getElementById('cards-box');
-    categoriesSection.classList.add('hidden');
+    // const categoriesSection = document.getElementById('cards-box');
+    // categoriesSection.classList.add('hidden');
 
-    const exercisesSection = document.getElementById('exercises');
-    exercisesSection.classList.remove('hidden');
+    // const exercisesSection = document.getElementById('exercises');
+    // exercisesSection.classList.remove('hidden');
 
-    const equipmentBox = document.getElementById('equipment-box');
-    equipmentBox.classList.add('hidden');
+    // const equipmentBox = document.getElementById('equipment-box');
+    // equipmentBox.classList.add('hidden');
 
     setOpenExercises(true);
     resetExercisesSearch();
