@@ -132,11 +132,12 @@ function renderPagination(currentPage, totalPages) {
       next: '>',
     },
 
-    scrollToTop: true,
-    scrollTarget: '.main-container',
-
+    scrollToTop: false,
     onPageChange(page) {
       activePage = page;
+      document
+        .querySelector('.filters__controls')
+        ?.scrollIntoView({ behavior: 'smooth' });
       return getCategories(activeFilter, page, PAGE_LIMIT);
     },
   });

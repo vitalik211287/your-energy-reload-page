@@ -242,8 +242,8 @@ export function renderExercisesPagination(currentPage, totalPages) {
     totalPages,
     mode: 'neighbors',
 
-    showPrevNext: totalPages > 2, 
-    showArrows: totalPages > 3, 
+    showPrevNext: totalPages > 2,
+    showArrows: totalPages > 3,
 
     classes: {
       page: 'exercises__page',
@@ -251,16 +251,18 @@ export function renderExercisesPagination(currentPage, totalPages) {
       prev: 'exercises__page-prev',
       next: 'exercises__page-next',
     },
-
-    scrollTarget: '.exercises',
-    onPageChange: page => loadExercisesList({ page }),
+    onPageChange: page => {
+      document
+        .querySelector('.filters__controls')
+        ?.scrollIntoView({ behavior: 'smooth' });
+      loadExercisesList({ page });
+    },
   });
 
   document
     .querySelector('.filters__controls')
     ?.scrollIntoView({ behavior: 'smooth' });
 }
-
 
 function handleExerciseItemClick(listEl) {
   const startButtons = listEl.querySelectorAll(

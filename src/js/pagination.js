@@ -4,8 +4,8 @@ export function renderPaginationUniversal({
   totalPages,
   onPageChange,
   mode = 'full',
-  showArrows = false, 
-  showPrevNext = false, 
+  showArrows = false,
+  showPrevNext = false,
   classes = {},
   icons = {},
   scrollToTop = true,
@@ -56,7 +56,6 @@ export function renderPaginationUniversal({
     }
   };
 
-
   if (mode !== 'neighbors') {
     if (showPrevNext && currentPage > 1) {
       const prevBtn = createBtn(prevIcon, currentPage - 1, prevClass);
@@ -83,12 +82,10 @@ export function renderPaginationUniversal({
       pages = [currentPage - 1, currentPage, currentPage + 1];
     }
 
-
-    const disablePrev = currentPage === 1; 
+    const disablePrev = currentPage === 1;
     const disableFirst = currentPage <= 2;
-    const isAtEnd = pages[2] === totalPages; 
+    const isAtEnd = currentPage === totalPages;
 
-  
     if (showArrows && totalPages > 3) {
       const firstBtn = createBtn(
         firstIcon,
