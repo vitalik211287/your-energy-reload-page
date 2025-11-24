@@ -127,36 +127,68 @@ function renderCards(items) {
 // Pagination
 function renderPagination(currentPage, totalPages) {
   const container = document.getElementById('pagination');
-  if (!container) return;
+  const container_2 = document.getElementById('pagination_1');
+  if (!container && !container_2) return;
+  if (container) {
+    renderPaginationUniversal({
+      container,
+      currentPage,
+      totalPages,
+      mode: 'neighbors',
 
-  renderPaginationUniversal({
-    container,
-    currentPage,
-    totalPages,
-    mode: 'neighbors',
+      showPrevNext: totalPages > 2,
+      showArrows: totalPages > 3,
 
-    showPrevNext: totalPages > 2,
-    showArrows: totalPages > 3,
+      classes: {
+        page: 'pagination-page',
+        active: 'active',
+        prev: 'pagination-page-prev',
+        next: 'pagination-page-next',
+      },
 
-    classes: {
-      page: 'pagination-page',
-      active: 'active',
-      prev: 'pagination-page-prev',
-      next: 'pagination-page-next',
-    },
+      icons: {
+        prev: '<',
+        next: '>',
+      },
 
-    icons: {
-      prev: '<',
-      next: '>',
-    },
+      scrollToTop: false,
+      onPageChange(page) {
+        activePage = page;
+        scrollToFilter();
+        return getCategories(activeFilter, page, PAGE_LIMIT);
+      },
+    });
+  }
+  if (container_2) {
+    renderPaginationUniversal({
+      container: container_2,
+      currentPage,
+      totalPages,
+      mode: 'neighbors',
 
-    scrollToTop: false,
-    onPageChange(page) {
-      activePage = page;
-      scrollToFilter();
-      return getCategories(activeFilter, page, PAGE_LIMIT);
-    },
-  });
+      showPrevNext: totalPages > 2,
+      showArrows: totalPages > 3,
+
+      classes: {
+        page: 'pagination-page',
+        active: 'active',
+        prev: 'pagination-page-p',
+        next: 'pagination-page-n',
+      },
+
+      icons: {
+        prev: '<',
+        next: '>',
+      },
+
+      scrollToTop: false,
+      onPageChange(page) {
+        activePage = page;
+        scrollToFilter();
+        return getCategories(activeFilter, page, PAGE_LIMIT);
+      },
+    });
+  }
 }
 
 // Clear Helpers
