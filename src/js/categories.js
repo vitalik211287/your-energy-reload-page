@@ -14,10 +14,31 @@ export const fetchApi = new YourEnergyAPI();
 const PAGE_LIMIT = window.innerWidth < 768 ? 9 : 12;
 
 // UI state
-// activeFilter: 'Muscles', 'Equipment', 'Body parts'
-//let activeFilter = 'Muscles';
 let activeFilter = window.activeFilter || 'Muscles';
 let activePage = 1;
+
+/**
+ * ✅ Єдина мапа для всіх табів
+ * Уніфікує: де рендерити картки і куди рендерити пагінацію
+ */
+const FILTER_UI = {
+  Muscles: {
+    cardsId: 'cards-container',
+    paginationSel: '.js-categories-pagination',
+  },
+  Equipment: {
+    cardsId: 'cards-container-equipment',
+    paginationSel: '.js-equipment-pagination',
+  },
+  'Body parts': {
+    cardsId: 'cards-container',
+    paginationSel: '.js-categories-pagination',
+  },
+};
+
+function getActiveUI() {
+  return FILTER_UI[window.activeFilter] || FILTER_UI.Muscles;
+}
 
 export async function getCategories(
   filter = activeFilter,
@@ -75,22 +96,10 @@ export async function getCategories(
 
 // Cards
 function renderCards(items) {
-  let cardsContainerId = 'cards-container';
-  switch (window.activeFilter) {
-    case 'Muscles':
-      cardsContainerId = 'cards-container';
-      break;
-    case 'Equipment':
-      cardsContainerId = 'cards-container-equipment';
-      break;
-    case 'Body parts':
-      cardsContainerId = 'cards-container';
-      break;
-    default:
-      cardsContainerId = 'cards-container';
-  }
-  const container = document.getElementById(cardsContainerId);
+  const ui = getActiveUI();
+  const container = document.getElementById(ui.cardsId);
   if (!container) return;
+
   container.innerHTML = '';
 
   items.forEach(item => {
@@ -113,20 +122,22 @@ function renderCards(items) {
       </div>
     `;
 
-    // handleCategoryCardClick;
     card.addEventListener('click', () => handleCategoryCardClick(item));
     container.appendChild(card);
 
     const cardBody = card.querySelector('.card-body');
-    cardBody.addEventListener('click', () => {
-      onCardBodyClick(safeName);
-    });
+    if (cardBody) {
+      cardBody.addEventListener('click', () => {
+        onCardBodyClick(safeName);
+      });
+    }
   });
 }
 
 // Pagination
 function renderPagination(currentPage, totalPages) {
-  const container = document.querySelector('.js-categories-pagination');
+  const ui = getActiveUI();
+  const container = document.querySelector(ui.paginationSel);
   if (!container) return;
 
   renderPaginationUniversal({
@@ -138,12 +149,12 @@ function renderPagination(currentPage, totalPages) {
     showPrevNext: totalPages > 2,
     showArrows: totalPages > 3,
 
+    // ✅ беремо ті самі класи що в exercises
     classes: {
       page: 'exercises__page',
       active: 'active',
       prev: 'exercises__page-prev',
       next: 'exercises__page-next',
-
       first: 'exercises__page-first',
       last: 'exercises__page-last',
       arrow: 'exercises__page-arrow',
@@ -168,12 +179,14 @@ function renderPagination(currentPage, totalPages) {
 
 // Clear Helpers
 function clearCards() {
-  const container = document.getElementById('cards-container');
+  const ui = getActiveUI();
+  const container = document.getElementById(ui.cardsId);
   if (container) container.innerHTML = '';
 }
 
 function clearPagination() {
-  const container = document.querySelector('.js-categories-pagination');
+  const ui = getActiveUI();
+  const container = document.querySelector(ui.paginationSel);
   if (container) container.innerHTML = '';
 }
 
@@ -184,7 +197,7 @@ export function onCardBodyClick(nameValue) {
   const equipmentBox = document.getElementById('equipment-box');
 
   const tabsContainer = document.querySelector('[data-filters-tabs]');
-  const activeTab = tabsContainer.querySelector('.filters__tab--active');
+  const activeTab = tabsContainer?.querySelector('.filters__tab--active');
   const activeFilterType = activeTab ? activeTab.dataset.filter : null;
 
   if (categoriesBox) categoriesBox.classList.add('hidden');
@@ -198,18 +211,18 @@ export function onCardBodyClick(nameValue) {
   if (filtersSubtitle) {
     filtersSubtitle.textContent =
       nameValue.charAt(0).toUpperCase() + nameValue.slice(1);
-  } else {
-    filtersSubtitle.textContent = '';
   }
 
   resetExercisesSearch();
   scrollToFilter();
+
   loadExercisesList({
     page: 1,
     filter: nameValue,
     type: activeFilterType,
-    keyword: '', // <-- критично
+    keyword: '',
   });
 }
 
+// Initial load
 getCategories(activeFilter, activePage, PAGE_LIMIT);
